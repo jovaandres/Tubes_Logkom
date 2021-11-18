@@ -3,14 +3,17 @@
 :- dynamic(expRanchingReward/1).
 
 /***** FAKTA *****/
-ranchedItems([egg, 3]).
-ranchedItems([wool, 10]).
-ranchedItems([susu, 5]).
-
-expRanchingReward(10).
+initRanch:-
+    asserta(expRanchingReward(10)),
+    asserta(ranchedItems([egg, 3])),
+    asserta(ranchedItems([wool, 10])),
+    asserta(ranchedItems([susu, 5])).
 
 /***** RULES *****/
 ranch :-
+    running(_),
+    playerPosition(X, Y),
+    ranchLoc(X, Y),
     write('Welcome to the ranch! You have:'), nl,
     inventory([chicken, ChickenQuantity, 0, 500]),
     inventory([sheep, SheepQuantity, 0, 1000]),
@@ -19,8 +22,12 @@ ranch :-
     write(SheepQuantity), write(' sheep'), nl,
     write(CowQuantity), write(' cow'), nl, nl,
     write('What do you want to do?'), nl,
-    read(X),
-    ranching(X).
+    read(C),
+    ranching(C), !.
+
+ranch :-
+    running(_),
+    write('You can\'t do ranch here!\n').
 
 /* Apabila hasil ternak bisa diambil, jumlah hasil ternak pada inventory bertambah,
    player mendapatkan ranching exp tambahan, waktu hewan ternak berproduksi akan direset ke awal.
@@ -178,7 +185,7 @@ updateRanchedItemsEgg :-
     RemainingTimeEgg > 0,
     RemainingTimeEgg1 is RemainingTimeEgg - 1,
     retractall(ranchedItems([egg, _])),
-    assertz(ranchedItems([egg, RemainingTimeEgg1])).
+    assertz(ranchedItems([egg, RemainingTimeEgg1])), !.
 
 updateRanchedItemsEgg. 
 
@@ -187,7 +194,7 @@ updateRanchedItemsWool :-
     RemainingTimeWool > 0,
     RemainingTimeWool1 is RemainingTimeWool - 1,
     retractall(ranchedItems([wool, _])),
-    assertz(ranchedItems([wool, RemainingTimeWool1])).
+    assertz(ranchedItems([wool, RemainingTimeWool1])), !.
 
 updateRanchedItemsWool.
 
@@ -196,6 +203,6 @@ updateRanchedItemsSusu :-
     RemainingTimeSusu > 0,
     RemainingTimeSusu1 is RemainingTimeSusu - 1,
     retractall(ranchedItems([susu, _])),
-    assertz(ranchedItems([susu, RemainingTimeSusu1])).
+    assertz(ranchedItems([susu, RemainingTimeSusu1])), !.
 
 updateRanchedItemsSusu.

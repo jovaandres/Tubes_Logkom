@@ -102,5 +102,19 @@ map:-
     running(_),
     writeMap(0, 0).
 
+dig:-
+    playerPosition(X, Y),
+    \+ questLoc(X, Y),
+    \+ ranchLoc(X, Y),
+    \+ houseLoc(X, Y),
+    \+ marketLoc(X, Y),
+    \+ tileAirLoc(X, Y),
+    \+ diggedTile(X, Y),
+    asserta(diggedTile(X, Y)),
+    write('You have dug, this place can be planted\n'), !.
+
+dig:-
+    write('You can\'t dig here!\n').
+
 initMap:-
     asserta(diggedTile(0, 0)).

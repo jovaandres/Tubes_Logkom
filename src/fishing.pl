@@ -1,38 +1,36 @@
  /******************** FISHING ********************/
 :- dynamic(countFish/1).
 :- dynamic(maxCountFish/1).
-:- dynamic(inventory/1).
 :- dynamic(expFishingReward/1).
 
 /***** FAKTA *****/
-expFishingReward(10).
-countFish(0).
-maxCountFish(3).
-
-inventory([salmon, 0, 0, 200]).
-inventory([mackeral, 0, 0, 150]).
-inventory([tuna, 0, 0, 175]).
-
-inventory([chicken, 2, 0, 500]).
-inventory([sheep, 1, 0, 1000]).
-inventory([cow, 3, 0, 1500]).
-
-inventory([egg, 0, 0, 100]).
-inventory([wool, 0, 0, 200]).
-inventory([susu, 0, 0, 150]).
+initFishing:-
+    asserta(expFishingReward(10)),
+    asserta(countFish(0)),
+    asserta(maxCountFish(3)).
 
 /***** RULES *****/
 fish :-
+    running(_),
+    playerPosition(X, Y),
+    aroundTileAir(X, Y),
     countFish(Count),
     maxCountFish(M),
     Count < M,
     !,
-    random(0, 3, X),
-    checkFish(X).
+    random(0, 3, N),
+    checkFish(N), !.
 
 fish :-
+    running(_),
+    playerPosition(X, Y),
+    aroundTileAir(X, Y),
     write('You reached the limit for fishing today...'), nl,
-    write('Come again tomorrow :)'), nl.
+    write('Come again tomorrow :)'), nl, !.
+
+fish :-
+    running(_),
+    write('You can\'t do fish here!'), nl.
 
 /* Mengecek jenis ikan apa yang ditangkap, 
    Jika berhasil, maka jumlah ikan di inventory akan bertambah */

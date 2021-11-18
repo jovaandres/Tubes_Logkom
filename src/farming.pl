@@ -1,37 +1,76 @@
-% BELUM SESUAIIN LOKASI
 /******************** FARMING *********************/
-:- dynamic(plantedItems/1).
+:- dynamic(planted/4).
 :- dynamic(expFarmingReward/1).
 
 /***** FAKTA *****/
 % planted(PlantItem, SisaWaktuTanam, PositionX, PositionY)
-plantedItems([corn, 5]).
-plantedItems([tomato, 7]).
-plantedItems([carrot, 10]).
-plantedItems([potato, 8]).
+initFarming:-
+    asserta(expFarmingReward(10)).
 
-expFarmingReward(10).
-
+plantedItems([cornSeed, 5]).
+plantedItems([tomatoSeed, 7]).
+plantedItems([carrotSeed, 10]).
+plantedItems([potatoSeed, 8]).
 /***** RULES *****/
 
-ranch :-
+plant :-
+    running(_),
+    playerPosition(X, Y),
+    diggedTile(X, Y),
     write('Welcome to the Farm! You have:'), nl,
     inventory([cornSeed, CornSeedQty, 0, 50]),
     inventory([tomatoSeed, TomatoSeedQty, 0, 50]),
-    inventory([carrotSeed, CarrotSeedQty, 0, 50),
+    inventory([carrotSeed, CarrotSeedQty, 0, 50]),
     inventory([potatoSeed, PotatoSeedQty, 0, 50]),
     write(CornSeedQty), write(' corn seed'), nl,
     write(TomatoSeedQty), write(' tomato seed'), nl,
     write(CarrotSeedQty), write(' carrot seed'), nl,
     write(PotatoSeedQty), write(' potato seed'), nl, nl,
     write('What do you want to do?'), nl,
-    read(X),
-    farming(X).
+    read(C),
+    planting(C, X, Y), !.
+
+plant :-
+    running(_),
+    write('You can\'t do farm here!\n'),
+    write('Maybe you should dig first!\n').
+
+harvest :-
+    running(_),
+    playerPosition(X, Y),
+    planted(Plant, _ , X, Y),
+    harvesting(Plant, X, Y), !.
+
+harvest :-
+    running(_),
+    playerPosition(X, Y),
+    \+ planted(_, _ , X, Y),
+    write('You don\'t have planted here!\n'), !.
+
+/**********************    Planting    *******************/
+planting(cornSeed, X, Y) :-
+    plantedItems([cornSeed, HarvestTime]),
+    asserta(planted(corn, HarvestTime, X, Y)),
+    write('Corn has been planted\n').
+
+planting(tomatoSeed, X, Y) :-
+    plantedItems([tomatoSeed, HarvestTime]),
+    asserta(planted(tomato, HarvestTime, X, Y)),
+    write('Tomato has been planted\n').
+
+planting(carrotSeed, X, Y) :-
+    plantedItems([carrotSeed, HarvestTime]),
+    asserta(planted(carrot, HarvestTime, X, Y)),
+    write('Carrot has been planted\n').
+
+planting(potatoSeed, X, Y) :-
+    plantedItems([potatoSeed, HarvestTime]),
+    asserta(planted(potato, HarvestTime, X, Y)),
+    write('Potato has been planted\n').
 
 /*************************** Corn **************************/
-
-farming(cornSeed)  :-
-    plantedItems([corn, RemainingTime]),
+harvesting(corn, X, Y)  :-
+    planted(corn, RemainingTime, X, Y),
     RemainingTime == 0,
     !,
     inventory([cornSeed, CornSeedQty, _, _]),
@@ -45,21 +84,20 @@ farming(cornSeed)  :-
     write('Your each corn seed produce '), write(LevelFarming), write(' corn..'), nl,
     write('You got '), write(CornSeedQty1), write(' corn!!'), nl,
     write('You gained '), write(N), write(' farming exp!!'), nl,
-    updatePlantedQuest,
+    updateHarvestQuest,
     updateExpFarming,
-    retractall(ranchedItems([corn, _])),
-    assertz(ranchedItems([corn, 5])).
+    retractall(planted(corn, RemainingTime, X, Y)), !.
 
-farming(cornSeed) :-
-    plantedItems([corn, RemainingTime]),
+harvesting(corn, X, Y) :-
+    planted(corn, RemainingTime, X, Y),
     write('Your corn is not ready to harvest yet:('), nl,
     write('It will ready in '), write(RemainingTime), write(' days..'), nl,
     write('Please check again later..'), nl.  
 
 /*************************** Tomato **************************/
 
-farming(tomatoSeed)  :-
-    plantedItems([tomato, RemainingTime]),
+harvesting(tomato, X, Y) :-
+    planted(tomato, RemainingTime, X, Y),
     RemainingTime == 0,
     !,
     inventory([tomatoSeed, TomatoSeedQty, _, _]),
@@ -73,20 +111,20 @@ farming(tomatoSeed)  :-
     write('Your each tomato seed produce '), write(LevelFarming), write(' tomato..'), nl,
     write('You got '), write(TomatoSeedQty1), write(' tomato!!'), nl,
     write('You gained '), write(N), write(' farming exp!!'), nl,
-    updatePlantedQuest,
+    updateHarvestQuest,
     updateExpFarming,
-    retractall(ranchedItems([tomato, _])),
-    assertz(ranchedItems([tomato, 7])).
+    retractall(planted(tomato, RemainingTime, X, Y)).
 
-farming(tomatoSeed) :-
-    plantedItems([tomato, RemainingTime]),
+harvesting(tomato, X, Y) :-
+    planted(tomato, RemainingTime, X, Y),
     write('Your tomato is not ready to harvest yet:('), nl,
     write('It will ready in '), write(RemainingTime), write(' days..'), nl,
     write('Please check again later..'), nl.  
 
 /*************************** Carrot **************************/
-farming(carrotSeed)  :-
-    plantedItems([carrot, RemainingTime]),
+
+harvesting(carrot, X, Y)  :-
+    planted(carrot, RemainingTime, X, Y),
     RemainingTime == 0,
     !,
     inventory([carrotSeed, CarrotSeedQty, _, _]),
@@ -100,20 +138,20 @@ farming(carrotSeed)  :-
     write('Your each carrot seed produce '), write(LevelFarming), write(' carrot..'), nl,
     write('You got '), write(CarrotSeedQty1), write(' carrot!!'), nl,
     write('You gained '), write(N), write(' farming exp!!'), nl,
-    updatePlantedQuest,
+    updateHarvestQuest,
     updateExpFarming,
-    retractall(ranchedItems([carrot, _])),
-    assertz(ranchedItems([carrot, 10])).
+    retractall(planted(carrot, RemainingTime, X, Y)).
 
-farming(carrotSeed) :-
-    plantedItems([carrot, RemainingTime]),
+harvesting(carrot, X, Y) :-
+    planted(carrot, RemainingTime, X, Y),
     write('Your carrot is not ready to harvest yet:('), nl,
     write('It will ready in '), write(RemainingTime), write(' days..'), nl,
     write('Please check again later..'), nl. 
 
 /*************************** Potato **************************/
-farming(potatoSeed)  :-
-    plantedItems([potato, RemainingTime]),
+
+harvesting(potato, X, Y)  :-
+    planted(potato, RemainingTime, X, Y),
     RemainingTime == 0,
     !,
     inventory([potatoSeed, PotatoSeedQty, _, _]),
@@ -127,25 +165,15 @@ farming(potatoSeed)  :-
     write('Your each potato seed produce '), write(LevelFarming), write(' potato..'), nl,
     write('You got '), write(PotatoSeedQty1), write(' potato!!'), nl,
     write('You gained '), write(N), write(' farming exp!!'), nl,
-    updatePlantedQuest,
+    updateHarvestQuest,
     updateExpFarming,
-    retractall(ranchedItems([potato, _])),
-    assertz(ranchedItems([potato, 8])).
+    retractall(planted(potato, RemainingTime, X, Y)).
 
-farming(potatoSeed) :-
-    plantedItems([potato, RemainingTime]),
+harvesting(potato, X, Y) :-
+    planted(potato, RemainingTime, X, Y),
     write('Your potato is not ready to harvest yet:('), nl,
     write('It will ready in '), write(RemainingTime), write(' days..'), nl,
     write('Please check again later..'), nl.
-
-/* Apabila ranching berhasil, maka jumlah Exp Ranching akan terupdate */
-updateExpRanching :-
-    expRanchingReward(N),
-    player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, GoldPlayer),
-    ExpRanching1 is ExpRanching + N,
-    retract(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, GoldPlayer)),
-    assertz(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching1, ExpPlayer, GoldPlayer)),
-    updateLevelRanching(ExpRanching1).
 
 /* Apabila farming berhasil, maka jumlah Exp Farming akan terupdate */
 updateExpFarming :-
@@ -153,7 +181,7 @@ updateExpFarming :-
     player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, GoldPlayer),
     ExpFarming1 is ExpFarming + N,
     retract(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, GoldPlayer)),
-    assertz(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching1, ExpPlayer, GoldPlayer)),
+    assertz(player(Job, Level, LevelFarming, ExpFarming1, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, GoldPlayer)),
     updateLevelFarming(ExpFarming1).
 
 /* Apabila exp melebihi batas untuk naik level, level akan terupdate */
@@ -162,8 +190,8 @@ updateLevelFarming(Exp):-
     player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, GoldPlayer),
     LevelFarming \= 2,
     !,
-    retractall(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelFarming, ExpRanching, ExpPlayer, GoldPlayer)),
-    assertz(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, 2, ExpRanching, ExpPlayer, GoldPlayer)),
+    retractall(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, GoldPlayer)),
+    assertz(player(Job, Level, 2, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, GoldPlayer)),
     nl, nl, write('Congratulation!! Your Farming Level has been upgraded to level 2!!'), nl,
     write('Now, each your corn, tomato, carrot, adn potato seed will produce 2 items...'), nl,
     write('Your current Farming Exp : '), write(Exp), nl,
@@ -174,8 +202,8 @@ updateLevelFarming(Exp):-
     player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, GoldPlayer),
     LevelFarming \= 3,
     !,
-    retractall(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelFarming, ExpRanching, ExpPlayer, GoldPlayer)),
-    assertz(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, 3, ExpRanching, ExpPlayer, GoldPlayer)),
+    retractall(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, GoldPlayer)),
+    assertz(player(Job, Level, 3, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, GoldPlayer)),
     nl, nl, write('Congratulation!! Your Farming Level has been upgraded to level 3!!'), nl,
     write('Now, each your corn, tomato, carrot, adn potato seed will produce 3 items...'), nl,
     write('Your current Farming Exp : '), write(Exp), nl,
@@ -186,8 +214,8 @@ updateLevelFarming(Exp):-
     player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, GoldPlayer),
     LevelFarming \= 4,
     !,
-    retractall(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelFarming, ExpRanching, ExpPlayer, GoldPlayer)),
-    assertz(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, 4, ExpRanching, ExpPlayer, GoldPlayer)),
+    retractall(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, GoldPlayer)),
+    assertz(player(Job, Level, 4, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, GoldPlayer)),
     nl, nl, write('Congratulation!! Your Farming Level has been upgraded to level 4!!'), nl,
     write('Now, each your corn, tomato, carrot, adn potato seed will produce 4 items...'), nl,
     write('Your current Farming Exp : '), write(Exp), nl,
@@ -198,14 +226,14 @@ updateLevelFarming(Exp):-
     player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, GoldPlayer),
     LevelFarming \= 5,
     !,
-    retractall(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelFarming, ExpRanching, ExpPlayer, GoldPlayer)),
-    assertz(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, 5, ExpRanching, ExpPlayer, GoldPlayer)),
+    retractall(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, GoldPlayer)),
+    assertz(player(Job, Level, 5, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, GoldPlayer)),
     nl, nl, write('Congratulation!! Your Farming Level has been upgraded to level 5!!'), nl,
     write('Now, each your corn, tomato, carrot, adn potato seed will produce 5 items...'), nl,
     write('Your current Farming Exp : '), write(Exp), nl,
     updateExpFarmingReward.
 
-updateLevelRanching(_).
+updateLevelFarming(_).
 /* Setelah level farming terupdate, maka Exp Farming Reward juga bertambah */
 updateExpFarmingReward :-
     expFarmingReward(N),
@@ -221,37 +249,37 @@ updatePlantedItems :-
     updatePlantedItemsPotato.
 
 updatePlantedItemsCorn :-
-    plantedItems([corn, RemainingTimeCorn]),
+    planted(corn, RemainingTimeCorn, X, Y),
     RemainingTimeCorn > 0,
     RemainingTimeCorn1 is RemainingTimeCorn - 1,
-    retractall(plantedItems([corn, _])),
-    assertz(plantedItems([corn, RemainingTimeCorn1])).
+    retractall(planted(corn, RemainingTimeCorn, X, Y)),
+    assertz(planted(corn, RemainingTimeCorn1, X, Y)), !.
 
 updatePlantedItemsCorn. 
 
 updatePlantedItemsTomato :-
-    plantedItems([tomato, RemainingTimeTomato]),
+    planted(tomato, RemainingTimeTomato, X, Y),
     RemainingTimeTomato > 0,
     RemainingTimeTomato1 is RemainingTimeTomato - 1,
-    retractall(plantedItems([tomato, _])),
-    assertz(plantedItems([tomato, RemainingTimeTomato1])).
+    retractall(planted(tomato, RemainingTimeTomato, X, Y)),
+    assertz(planted(tomato, RemainingTimeTomato1, X, Y)), !.
 
 updatePlantedItemsTomato.
 
 updatePlantedItemsCarrot :-
-    plantedItems([carrot, RemainingTimeCarrot]),
+    planted(carrot, RemainingTimeCarrot, X, Y),
     RemainingTimeCarrot > 0,
     RemainingTimeCarrot1 is RemainingTimeCarrot - 1,
-    retractall(plantedItems([carrot, _])),
-    assertz(plantedItems([carrot, RemainingTimeCarrot1])).
+    retractall(planted(carrot, RemainingTimeCarrot, X, Y)),
+    assertz(planted(carrot, RemainingTimeCarrot1, X, Y)), !.
 
 updatePlantedItemsCarrot.
 
 updatePlantedItemsPotato :-
-    plantedItems([potato, RemainingTimePotato]),
+    planted(potato, RemainingTimePotato, X, Y),
     RemainingTimePotato > 0,
     RemainingTimePotato1 is RemainingTimePotato - 1,
-    retractall(plantedItems([potato, _])),
-    assertz(plantedItems([potato, RemainingTimePotato1])).
+    retractall(planted(potato, RemainingTimePotato, X, Y)),
+    assertz(planted(potato, RemainingTimePotato1, X, Y)), !.
 
 updatePlantedItemsPotato.

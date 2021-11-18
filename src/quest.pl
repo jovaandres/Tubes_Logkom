@@ -1,19 +1,3 @@
-:- dynamic(player/1).
-:- dynamic(day/1).
-/* player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, Exp, Gold) */
-
-initPlayer :-
-    assertz(player(fisher, 1, 1, 99, 1, 99, 1, 99, 21, 100)).
-
-day(1).
-updateDay :-
-    day(X),
-    X1 is X + 1,
-    retractall(day(_)),
-    assertz(day(X1)),
-    resetCountFish,
-    updateRanchedItems.
-
 /******************** QUEST ********************/
 :- dynamic(currentQuest/1).
 :- dynamic(historyQuest/1).
@@ -22,20 +6,23 @@ updateDay :-
 :- dynamic(goldReward/1).
 
 /***** FAKTA *****/
-nQuest(1).
-expReward(10).
-goldReward(150).
+initQuest:-
+    asserta(nQuest(1)),
+    asserta(expReward(10)),
+    asserta(goldReward(150)),
+    initializeQuest.
 
 /***** RULES *****/
 quest :-
+    running(_),
     nQuest(N),
     N == 1,
-    initializeQuest,
     printNewQuest,
     incNQuest,
     !.
 
 quest :-
+    running(_),
     currentQuest(HarvestItem, Fish, Eggs),
     HarvestItem == 0,
     Fish == 0,
@@ -49,6 +36,7 @@ quest :-
     incNQuest.
 
 quest :-
+    running(_),
     printQuest.
 
 /* Inisialisasi Quest awal, menyesuaikan job player */
@@ -61,7 +49,7 @@ initializeQuest :-
 
 initializeQuest :-
     player(Job, _, _, _, _, _, _, _, _, _),
-    Job == fisher,
+    Job == fisherman,
     !,
     assertz(currentQuest(1, 3, 1)),
     assertz(historyQuest(1, 3, 1)).

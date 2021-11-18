@@ -1,9 +1,14 @@
 :- dynamic(running/1).
 :- dynamic(initialized/1).
 
+:- include('explore_mechanism.pl').
+:- include('farming.pl').
+:- include('fishing.pl').
+:- include('inventory.pl').
 :- include('map.pl').
 :- include('player.pl').
-:- include('explore_mechanism.pl').
+:- include('quest.pl').
+:- include('ranching.pl').
 
 help:-
     initialized(_),
@@ -50,7 +55,12 @@ startGame:-
 
 assert_run(Job):-
     asserta(running(1)),
-    initPlayer(Job).
+    initFishing,
+    initFarming,
+    initRanch,
+    initInventory,
+    initPlayer(Job),
+    initQuest.
 
 % Mulai game
 start:-

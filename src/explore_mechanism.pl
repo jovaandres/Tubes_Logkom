@@ -5,7 +5,10 @@ handleMove:-
     M =:= 15,
     NewDay is D + 1,
     retract(day(_)), asserta(day(NewDay)),
-    retract(move(_)), asserta(move(0)), !.
+    retract(move(_)), asserta(move(0)), 
+    resetCountFish,
+    updateRanchedItems, 
+    updatePlantedItems, !.
 
 handleMove:-
     move(M),
