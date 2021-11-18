@@ -9,7 +9,7 @@ goal(20000).
 % Player(Job, Level, Level_Farming, Exp_Farming, Level_Fishing, Exp_Fishing, Level_Ranching, Exp_Ranching, Exp, Gold)
 % Inisiasi di posisi 1, 1
 initPlayer(Job):-
-    asserta(playerPosition(1, 1)),
+    asserta(playerPosition(4, 4)),
     asserta(player(Job, 1, 1, 0, 1, 0, 1, 0, 0, 250)),
     asserta(day(1)),
     asserta(move(0)),

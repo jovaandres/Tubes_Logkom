@@ -1,7 +1,6 @@
 :- dynamic(listDiary/1).
 
 % nanti day nya disesuaiin
-day(10).
 
 listDiary([]).
 /***************************** Write Diary *****************************/
@@ -13,7 +12,29 @@ fileName(Fname) :-
 
 /* saat ini diary hanya bisa menginput sentence dengan '',
     gunakan '' untuk diary lebih dari 1 kata. */
+
+sleeping :-
+    running(_),
+    playerPosition(A, O),
+    houseLoc(A, O),
+    asserta(move(15)),
+    handleMove,
+    write('.\n'),
+    sleep(0.5),
+    write('.\n'),
+    sleep(0.5),
+    write('.\n'),
+    write('That\'s a very long night, you can\'t sleep thinking about her.\n'),
+    !.
+
+sleeping :-
+    running(_),
+    write('Are you sure you want to sleep here? Come on! You have your own house.\n').
+
 writeDiary :-
+    running(_),
+    playerPosition(A, O),
+    houseLoc(A, O),
     day(X),
     fileName(_Fname),
     write('Write your diary for day '), write(X), write(:), nl,
@@ -28,8 +49,11 @@ writeDiary :-
     listDiary(L),
     append(L, [X], Lnew),
     retractall(listDiary(_)),
-    assertz(listDiary(Lnew)).
+    assertz(listDiary(Lnew)), !.
 
+writeDiary :-
+    running(_),
+    write('You can only write your diary in your house!\n').
 
 /* source: https://www.tutorialspoint.com/prolog/prolog_inputs_and_outputs.htm */
 process_file :-

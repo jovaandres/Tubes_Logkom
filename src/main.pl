@@ -4,6 +4,7 @@
 :- include('explore_mechanism.pl').
 :- include('farming.pl').
 :- include('fishing.pl').
+:- include('house.pl').
 :- include('inventory.pl').
 :- include('map.pl').
 :- include('player.pl').

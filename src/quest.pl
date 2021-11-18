@@ -15,6 +15,8 @@ initQuest:-
 /***** RULES *****/
 quest :-
     running(_),
+    playerPosition(X, Y),
+    questLoc(X, Y),
     nQuest(N),
     N == 1,
     printNewQuest,
@@ -23,6 +25,8 @@ quest :-
 
 quest :-
     running(_),
+    playerPosition(X, Y),
+    questLoc(X, Y),
     currentQuest(HarvestItem, Fish, Eggs),
     HarvestItem == 0,
     Fish == 0,
@@ -37,6 +41,8 @@ quest :-
 
 quest :-
     running(_),
+    playerPosition(X, Y),
+    questLoc(X, Y),
     printQuest.
 
 /* Inisialisasi Quest awal, menyesuaikan job player */
