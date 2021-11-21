@@ -1,6 +1,6 @@
 % Inventory sementara
 :- dynamic(inventory/2).
-:- include('../../marketplace.pl').
+:- include('marketplace.pl').
 
 initInventory:-
     asserta(inventory([salmon, 0, 0, 200],sell)),

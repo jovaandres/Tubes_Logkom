@@ -107,7 +107,7 @@ updateFishQuest :-
 updateEggsQuest :-
     currentQuest(HarvestItem, Fish, Eggs),
     player(_, _, _, _, _, _, LevelRanching, _, _, _),
-    inventory([chicken, Quantity, _, _]),
+    inventory([chicken, Quantity, _, _], _),
     N is Quantity * LevelRanching,
     Eggs1 is Eggs - N,
     Eggs1 >= 0,

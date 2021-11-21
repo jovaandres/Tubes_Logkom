@@ -43,10 +43,10 @@ checkFish(1) :-
     player(_, _, _, _, LevelFishing, _, _, _, _, _),
     write('You got '), write(LevelFishing), write(' mackeral!!'), nl,
     write('You gained '), write(N), write(' fishing exp!!'),
-    inventory([mackeral, Quantity, Level, Price]),
+    inventory([mackeral, Quantity, Level, Price], X),
     Quantity1 is Quantity + LevelFishing,
-    retractall(inventory([mackeral, _, _, _])),
-    assertz(inventory([mackeral, Quantity1, Level, Price])),
+    retractall(inventory([mackeral, _, _, _], X)),
+    assertz(inventory([mackeral, Quantity1, Level, Price], X)),
     succedFishing.
 
 checkFish(2) :-
@@ -54,10 +54,10 @@ checkFish(2) :-
     player(_, _, _, _, LevelFishing, _, _, _, _, _),
     write('You got '), write(LevelFishing), write(' tuna!!'), nl,
     write('You gained '), write(N), write(' fishing exp!!'),
-    inventory([tuna, Quantity, Level, Price]),
+    inventory([tuna, Quantity, Level, Price], X),
     Quantity1 is Quantity + LevelFishing,
-    retractall(inventory([tuna, _, _, _])),
-    assertz(inventory([tuna, Quantity1, Level, Price])),
+    retractall(inventory([tuna, _, _, _], X)),
+    assertz(inventory([tuna, Quantity1, Level, Price], X)),
     succedFishing.
 
 checkFish(3) :-
@@ -65,10 +65,10 @@ checkFish(3) :-
     player(_, _, _, _, LevelFishing, _, _, _, _, _),
     write('You got '), write(LevelFishing), write(' salmon!!'), nl,
     write('You gained '), write(N), write(' fishing exp!!'),
-    inventory([salmon, Quantity, Level, Price]),
+    inventory([salmon, Quantity, Level, Price], X),
     Quantity1 is Quantity + LevelFishing,
-    retractall(inventory([salmon, _, _, _])),
-    assertz(inventory([salmon, Quantity1, Level, Price])),
+    retractall(inventory([salmon, _, _, _], X)),
+    assertz(inventory([salmon, Quantity1, Level, Price], X)),
     succedFishing.
 
 /* Apabila berhasil menangkap ikan, jumlah ikan tangkapan harian akan ditambah,
