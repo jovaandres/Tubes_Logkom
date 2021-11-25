@@ -36,7 +36,11 @@ fish :-
    Jika berhasil, maka jumlah ikan di inventory akan bertambah */
 checkFish(0) :-
     write('You did not get anything :('), nl,
-    write('You gained 5 fishing exp'), nl.
+    write('You gained 5 fishing exp'), nl,
+    player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, GoldPlayer),
+    ExpFishing1 is ExpFishing + 5,
+    retract(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, GoldPlayer)),
+    assertz(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing1, LevelRanching, ExpRanching, ExpPlayer, GoldPlayer)).
 
 checkFish(1) :-
     expFishingReward(N),
@@ -74,10 +78,10 @@ checkFish(3) :-
 /* Apabila berhasil menangkap ikan, jumlah ikan tangkapan harian akan ditambah,
    ExpFsihing bertambah, dan jumlah Fishing Quest akan berkurang */
 succedFishing :-
-    updateCountFish,
     nQuest(X),
     X \= 1,
     !,
+    updateCountFish,
     updateFishQuest,
     updateExpFishing.
 
