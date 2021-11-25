@@ -1,15 +1,17 @@
 :- dynamic(running/1).
 :- dynamic(initialized/1).
 
-:- include('explore_mechanism.pl').
-:- include('farming.pl').
-:- include('fishing.pl').
-:- include('house.pl').
-:- include('inventory.pl').
-:- include('map.pl').
-:- include('player.pl').
-:- include('quest.pl').
-:- include('ranching.pl').
+:- include('explore_mechanism').
+:- include('farming').
+:- include('fishing').
+:- include('house').
+:- include('inventory').
+:- include('item').
+:- include('map').
+:- include('marketplace').
+:- include('player').
+:- include('quest').
+:- include('ranching').
 
 help:-
     initialized(_),

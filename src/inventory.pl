@@ -1,6 +1,5 @@
 % Inventory sementara
 :- dynamic(inventory/2).
-:- include('marketplace.pl').
 
 initInventory:-
     asserta(inventory([salmon, 0, 0, 200],sell)),
@@ -32,7 +31,7 @@ initInventory:-
 
 inventory:- 
     running(_),
-    createliststuff(X,Y,Z),sumlist(Y,N1),
+    createliststuff(_,Y,_),sumlist(Y,N1),
     format("Your inventory (~w/100)~n",[N1]),
     displayinginv.
 
@@ -81,7 +80,7 @@ cekBuang(Buang):-
 cekCount(Penamaan, Membuang,Jmlh):- 
     Jmlh >= Membuang -> 
         K2 is (Jmlh - Membuang),write(K2),
-        retract(inventory([Penamaan,K,Lefel,Harga],Jenis)),
+        retract(inventory([Penamaan,_,Lefel,Harga],Jenis)),
         assertz(inventory([Penamaan,K2,Lefel,Harga],Jenis)),
         format("You threw away ~w ~w.",[Membuang,Penamaan]);
     format("You don't have enough ~w. Cancelling...",[Penamaan]).

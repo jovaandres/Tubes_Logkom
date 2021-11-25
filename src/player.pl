@@ -3,6 +3,7 @@
 :- dynamic(day/1).
 :- dynamic(move/1).
 :- dynamic(maxExp/1).
+:- dynamic(teleChance/1).
 
 goal(20000).
 
@@ -13,7 +14,8 @@ initPlayer(Job):-
     asserta(player(Job, 1, 1, 0, 1, 0, 1, 0, 0, 250)),
     asserta(day(1)),
     asserta(move(0)),
-    asserta(maxExp(300)).
+    asserta(maxExp(300)),
+    asserta(teleChance(2)).
 
 status:-
     player(Job, Level, Level_Farming, Exp_Farming, Level_Fishing, Exp_Fishing, Level_Ranching, Exp_Ranching, Exp, Gold),

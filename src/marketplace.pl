@@ -1,33 +1,43 @@
 :- dynamic(inventory/2).
-:- dynamic(player/10).
-:- include('item.pl').
-
-
-
 /************FAKTA************/
-
-
 
 /************RULES************/
 
 %main commands lokasi belumm
 
 market :- 
-		  running(_),
-		  playerPosition(X, Y),
-		  asserta(welcome(1)),
-		  write('Welcome to the market, what do you want to do?\n'),
-		  write('1. buy\n2. sell').
+	running(_),
+	playerPosition(X, Y),
+	marketLoc(X, Y),
+	asserta(welcome(1)),
+	write('Welcome to the market, what do you want to do?\n'),
+	write('1. buy\n2. sell'), !.
+
+market :-
+	running(_),
+	write('You are not in the market!'), nl.
 
 
 buy :- 
-		playerPosition(X,Y),
-	   write('what do you want to buy?\n\n These are the list of items you can buy\n'),
-	   bahanbuy(8), equipbuy,
-	   readingjenis.
+	running(_),
+	playerPosition(X,Y),
+	marketLoc(X, Y),
+	write('what do you want to buy?\n\n These are the list of items you can buy\n'),
+	bahanbuy(8), equipbuy,
+	readingjenis, !.
 
-sell:- bahansell,playerPosition(X,Y).
+buy :-
+	running(_),
+	write('You are not in the market!'), nl.
 
+sell:- 
+	playerPosition(X,Y),
+	marketLoc(X, Y),
+	bahansell.
+
+sell :-
+	running(_),
+	write('You are not in the market!'), nl.
 
 %operasi displaying
 bahanbuy(1).	
@@ -45,10 +55,10 @@ createlistbuyequip(Equip1,Equip2,Equip3,Equip4) :-
 	findall(Name3, equipments(_,ranch1,Name3,Level_Ranching,1,_), Equip3),
 	findall(Name4, equipments(_,ranch2,Name4,Level_Ranching,1,_), Equip4).
 
-cekequips(E1,E2,E3,E4) :- E1 \= [],displayequips(E1,farm).
-cekequips(E1,E2,E3,E4) :- E2 \= [], displayequips(E2,fish).
-cekequips(E1,E2,E3,E4) :- E3 \= [],displayequips(E3,ranch1).
-cekequips(E1,E2,E3,E4) :- E4 \= [], displayequips(E4,ranch2).
+cekequips(E1,_,_,_) :- E1 \= [],displayequips(E1,farm).
+cekequips(_,E2,_,_) :- E2 \= [], displayequips(E2,fish).
+cekequips(_,_,E3,_) :- E3 \= [],displayequips(E3,ranch1).
+cekequips(_,_,_,E4) :- E4 \= [], displayequips(E4,ranch2).
 
 displayequips([A|_],J):- 
 	player(_,_,Level_Farming,_,Level_Fishing,_,Level_Ranching,_,_,_),

@@ -6,6 +6,7 @@ handleMove:-
     NewDay is D + 1,
     retract(day(_)), asserta(day(NewDay)),
     retract(move(_)), asserta(move(0)), 
+    dayUpdateNotes,
     resetCountFish,
     updateRanchedItems, 
     updatePlantedItems, !.
@@ -13,7 +14,28 @@ handleMove:-
 handleMove:-
     move(M),
     NextMove is M + 1,
-    retract(move(_)), asserta(move(NextMove)), !.    
+    retract(move(_)), asserta(move(NextMove)), !.
+
+dayUpdateNotes:-
+    player(_, Level, _, _, _, _, _, _, Exp, Gold),
+    day(D),
+    write('Day '), write(D), write('!!!'), nl,
+    write('Level : '), write(Level), nl,
+    write('Exp   : '), write(Exp), nl,
+    write('The current total gold collected is '), write(Gold), nl,
+    RemainingTime is 365 - D,
+    write('You still have '), write(RemainingTime) , write(' day to pay off your debt, if you can\'t... well'), nl.
+
+placeInteract:-
+    playerPosition(X, Y),
+    (
+        questLoc(X, Y) -> write('Quest! Type \'quest\' to request a new quest.\n'), ! ;
+        ranchLoc(X, Y) -> write('Check the farm now!\n'), ! ;
+        houseLoc(X, Y) -> write('You have had a long day. You can sleep now (if you don\'t have insomnia ofc :D )\n'), ! ;
+        marketLoc(X, Y) -> write('Welcome to the marketplace! Here you can buy or sell items.\n'), ! ;
+        diggedTile(X, Y) -> write('You can grow crops here\n'), ! ;
+        write('')
+    ).  
 
 % Gerak ke atas(w), bawah(s), kiri(a), kanan(d)
 w:-
@@ -22,9 +44,7 @@ w:-
     (
         bound(X, YNext) -> write('You have reached the map limit!') ;
         tileAirLoc(X, YNext) -> write('You can\'t get into water!!')
-    ), 
-    nl,
-    !.
+    ), nl, !.
 
 w:-
     playerPosition(X, Y),
@@ -34,7 +54,7 @@ w:-
     retract(playerPosition(X, Y)),
     asserta(playerPosition(X, YNew)), 
     write('You move north.'), nl,
-    !.
+    placeInteract, !.
 
 s:-
     playerPosition(X, Y),
@@ -42,9 +62,7 @@ s:-
     (
         bound(X, YNext) -> write('You have reached the map limit!') ;
         tileAirLoc(X, YNext) -> write('You can\'t get into water!!')
-    ), 
-    nl, 
-    !.
+    ), nl, !.
 
 s:-
     playerPosition(X, Y),
@@ -52,9 +70,9 @@ s:-
     YNew is Y + 1,
     handleMove,
     retract(playerPosition(X, Y)),
-    asserta(playerPosition(X, YNew)),  
+    asserta(playerPosition(X, YNew)),   
     write('You move down.'), nl,
-    !.
+    placeInteract, !.
 
 a:-
     playerPosition(X, Y),
@@ -62,9 +80,7 @@ a:-
     (
         bound(XNext, Y) -> write('You have reached the map limit!') ;
         tileAirLoc(XNext, Y) -> write('You can\'t get into water!!')
-    ), 
-    nl, 
-    !.
+    ), nl, !.
 
 a:-
     playerPosition(X, Y),
@@ -72,9 +88,9 @@ a:-
     XNew is X - 1,
     handleMove,
     retract(playerPosition(X, Y)),
-    asserta(playerPosition(XNew, Y)), 
-    write('You move west.'), nl,
-    !.
+    asserta(playerPosition(XNew, Y)),  
+    write('You move west.'), nl, 
+    placeInteract,!.
 
 d:-
     playerPosition(X, Y),
@@ -82,9 +98,7 @@ d:-
     (
         bound(XNext, Y) -> write('You have reached the map limit!') ;
         tileAirLoc(XNext, Y) -> write('You can\'t get into water!!')
-    ), 
-    nl, 
-    !.
+    ), nl, !.
 
 d:-
     playerPosition(X, Y),
@@ -93,5 +107,5 @@ d:-
     handleMove,
     retract(playerPosition(X, Y)),
     asserta(playerPosition(XNew, Y)),  
-    write('You move east.'), nl,
-    !.
+    write('You move east.'), nl, 
+    placeInteract, !.

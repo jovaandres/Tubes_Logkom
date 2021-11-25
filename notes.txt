@@ -1,0 +1,1 @@
+Kalo sering ngelag, pake gprolog di linux aja, wsl atau yg lain

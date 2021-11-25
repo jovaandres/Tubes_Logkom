@@ -47,39 +47,13 @@ aroundTileAir(X, Y):-
 % Buat ngeprint map
 writeMap(X, Y):-
     dimension(A, B),
-    X =:= A,
-    Y =:= B,
-    write('#'), !.
-
-writeMap(X, Y):-
-    X =:= 0,
-    write('#'),
-    Next is X + 1,
-    writeMap(Next, Y), !.
-
-writeMap(X, Y):-
-    dimension(A, _),
-    X \= A,
-    Y =:= 0,
-    write('#'),
-    Next is X + 1,
-    writeMap(Next, Y), !.
-
-writeMap(X, Y):-
-    dimension(A, B),
-    X =:= A,
-    Y \= B,
-    write('#'),
-    Next is Y + 1, nl,
-    writeMap(0, Next), !.
-
-writeMap(X, Y):-
-    dimension(A, B),
-    X \= A,
-    Y =:= B,
-    write('#'),
-    Next is X + 1,
-    writeMap(Next, Y), !.
+    bound(X, Y),
+    write('#'), 
+    (
+        (X =:= A, Y =:= B) -> ! ;
+        (X =:= A) -> nl, Next is Y + 1, writeMap(0, Next), ! ;
+        Next is X + 1, writeMap(Next, Y)
+    ), !.
 
 writeMap(X, Y):-
     dimension(A, B),
