@@ -103,7 +103,7 @@ ranching(3) :-
 
 ranching(3) :-
     ranchedItems([susu, RemainingTime]),
-    write('Your cow has not produced any wool yet :('), nl,
+    write('Your cow has not produced any milk yet :('), nl,
     write('It will produce some milks in '), write(RemainingTime), write(' days..'), nl,
     write('Please check again later..'), nl.
 
@@ -124,7 +124,7 @@ updateLevelRanching(Exp):-
     !,
     retractall(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, GoldPlayer)),
     assertz(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, 2, ExpRanching, ExpPlayer, GoldPlayer)),
-    nl, nl, write('Congratulation!! Your Ranching Level has been upgraded to level 2!!'), nl,
+    nl, write('Congratulation!! Your Ranching Level has been upgraded to level 2!!'), nl,
     write('Now, your chicken, sheep, and cow will produce 2 items...'), nl,
     write('Your current Ranching Exp : '), write(Exp), nl,
     updateExpRanchingReward.
@@ -136,7 +136,7 @@ updateLevelRanching(Exp):-
     !,
     retractall(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, GoldPlayer)),
     assertz(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, 3, ExpRanching, ExpPlayer, GoldPlayer)),
-    nl, nl, write('Congratulation!! Your Ranching Level has been upgraded to level 3!!'), nl,
+    nl, write('Congratulation!! Your Ranching Level has been upgraded to level 3!!'), nl,
     write('Now, your chicken, sheep, and cow will produce 3 items...'), nl,
     write('Your current Ranching Exp : '), write(Exp), nl,
     updateExpRanchingReward.
@@ -148,7 +148,7 @@ updateLevelRanching(Exp):-
     !,
     retractall(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, GoldPlayer)),
     assertz(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, 4, ExpRanching, ExpPlayer, GoldPlayer)),
-    nl, nl, write('Congratulation!! Your Ranching Level has been upgraded to level 4!!'), nl,
+    nl, write('Congratulation!! Your Ranching Level has been upgraded to level 4!!'), nl,
     write('Now, your chicken, sheep, and cow will produce 4 items...'), nl,
     write('Your current Ranching Exp : '), write(Exp), nl,
     updateExpRanchingReward.
@@ -160,7 +160,7 @@ updateLevelRanching(Exp):-
     !,
     retractall(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, GoldPlayer)),
     assertz(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, 5, ExpRanching, ExpPlayer, GoldPlayer)),
-    nl, nl, write('Congratulation!! Your Ranching Level has been upgraded to level 5!!'), nl,
+    nl, write('Congratulation!! Your Ranching Level has been upgraded to level 5!!'), nl,
     write('Now, your chicken, sheep, and cow will produce 5 items...'), nl,
     write('Your current Ranching Exp : '), write(Exp), nl,
     updateExpRanchingReward.

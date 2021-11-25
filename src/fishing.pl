@@ -10,7 +10,7 @@ initFishing:-
     asserta(maxCountFish(3)).
 
 /***** RULES *****/
-fish :-
+fishing :-
     running(_),
     playerPosition(X, Y),
     aroundTileAir(X, Y),
@@ -18,19 +18,19 @@ fish :-
     maxCountFish(M),
     Count < M,
     !,
-    random(0, 3, N),
+    random(0, 4, N),
     checkFish(N), !.
 
-fish :-
+fishing :-
     running(_),
     playerPosition(X, Y),
     aroundTileAir(X, Y),
     write('You reached the limit for fishing today...'), nl,
     write('Come again tomorrow :)'), nl, !.
 
-fish :-
+fishing :-
     running(_),
-    write('You can\'t do fish here!'), nl.
+    write('You can\'t do fishing here!'), nl.
 
 /* Mengecek jenis ikan apa yang ditangkap, 
    Jika berhasil, maka jumlah ikan di inventory akan bertambah */
