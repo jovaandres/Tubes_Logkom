@@ -1,7 +1,5 @@
 :- dynamic(listDiary/1).
 
-% nanti day nya disesuaiin
-
 listDiary([]).
 /***************************** Write Diary *****************************/
 fileName(Fname) :-
@@ -9,9 +7,6 @@ fileName(Fname) :-
     number_atom(_X, _Xatom),
     atom_concat('MyDiary/Day', _Xatom, _Fname1),
     atom_concat(_Fname1, '.txt', Fname).
-
-/* saat ini diary hanya bisa menginput sentence dengan '',
-    gunakan '' untuk diary lebih dari 1 kata. */
 
 teleOptions:-
     dimension(X0, Y0),
@@ -75,6 +70,7 @@ sleeping :-
     running(_),
     write('Are you sure you want to sleep here? Come on! You have your own house.\n').
 
+/* jika diary lebih dari 1 kata maka wajib menggunakan ''. */
 writeDiary :-
     running(_),
     playerPosition(A, O),
@@ -127,7 +123,3 @@ readDiary :-
     atom_concat('MyDiary/Day', Datom, _Fname1),
     atom_concat(_Fname1, '.txt', Fname),
     see(Fname), process_file, seen.
-
-% see('output.txt'), process_file, seen.
-
-% append('output.txt'), write('abc'), write('\n'), write('a'), told.

@@ -31,7 +31,10 @@ placeInteract:-
     (
         questLoc(X, Y) -> write('Quest! Type \'quest\' to request a new quest.\n'), ! ;
         ranchLoc(X, Y) -> write('Check the farm now!\n'), ! ;
-        houseLoc(X, Y) -> write('You have had a long day. You can sleep now (if you don\'t have insomnia ofc :D )\n'), ! ;
+        houseLoc(X, Y) -> write('You have had a long day. In house you can:\n'),
+                        write('1. sleeping - if you don\'t have insomnia ofc :D\n'),
+                        write('2. writeDiary - to capture your moment today\n'),
+                        write('3. readDiary - if you want to nostalgic\n'), ! ;
         marketLoc(X, Y) -> write('Welcome to the marketplace! Here you can buy or sell items.\n'), ! ;
         diggedTile(X, Y) -> write('You can grow crops here\n'), ! ;
         write('')
