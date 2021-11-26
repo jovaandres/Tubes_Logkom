@@ -50,10 +50,10 @@ w:-
     playerPosition(X, Y),
     \+ bound(X, Y - 1),
     YNew is Y - 1,
-    handleMove,
     retract(playerPosition(X, Y)),
-    asserta(playerPosition(X, YNew)), 
+    asserta(playerPosition(X, YNew)),
     write('You move north.'), nl,
+    handleMove,
     placeInteract, !.
 
 s:-
@@ -68,10 +68,10 @@ s:-
     playerPosition(X, Y),
     \+ bound(X, Y + 1),
     YNew is Y + 1,
-    handleMove,
     retract(playerPosition(X, Y)),
-    asserta(playerPosition(X, YNew)),   
+    asserta(playerPosition(X, YNew)),
     write('You move down.'), nl,
+    handleMove,
     placeInteract, !.
 
 a:-
@@ -86,10 +86,10 @@ a:-
     playerPosition(X, Y),
     \+ bound(X - 1, Y),
     XNew is X - 1,
-    handleMove,
     retract(playerPosition(X, Y)),
-    asserta(playerPosition(XNew, Y)),  
+    asserta(playerPosition(XNew, Y)),
     write('You move west.'), nl, 
+    handleMove,
     placeInteract,!.
 
 d:-
@@ -104,8 +104,8 @@ d:-
     playerPosition(X, Y),
     \+ bound(X + 1, Y),
     XNew is X + 1,
-    handleMove,
     retract(playerPosition(X, Y)),
-    asserta(playerPosition(XNew, Y)),  
+    asserta(playerPosition(XNew, Y)),
     write('You move east.'), nl, 
+    handleMove,
     placeInteract, !.

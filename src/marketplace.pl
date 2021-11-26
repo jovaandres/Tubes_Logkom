@@ -9,7 +9,6 @@ market :-
 	running(_),
 	playerPosition(X, Y),
 	marketLoc(X, Y),
-	asserta(welcome(1)),
 	write('Welcome to the market, what do you want to do?\n'),
 	write('1. buy\n2. sell'), !.
 
@@ -22,8 +21,9 @@ buy :-
 	running(_),
 	playerPosition(X,Y),
 	marketLoc(X, Y),
-	write('what do you want to buy?\n\n These are the list of items you can buy\n'),
-	bahanbuy(8), equipbuy,
+	write('what do you want to buy?\n\nThese are the list of items you can buy\n'),
+	write('Items: \n'), bahanbuy(8), nl,
+	write('Equipments: \n'), equipbuy, nl,
 	readingjenis, !.
 
 buy :-
@@ -43,7 +43,7 @@ sell :-
 bahanbuy(1).	
 bahanbuy(N) :- 
 	N1 is N-1 ,bahanbuy(N1), beliitems(N1,X,Y),
-	write(N1),write('. '),write(X),write(' ('), write(Y), write('golds)'),nl.
+	write(N1),write('. '),write(X),write(' ('), write(Y), write(' golds)'),nl.
 
 equipbuy :-	createlistbuyequip(B1,B2,B3,B4),cekequips(B1,B2,B3,B4).
 
@@ -55,23 +55,27 @@ createlistbuyequip(Equip1,Equip2,Equip3,Equip4) :-
 	findall(Name3, equipments(_,ranch1,Name3,Level_Ranching,1,_), Equip3),
 	findall(Name4, equipments(_,ranch2,Name4,Level_Ranching,1,_), Equip4).
 
-cekequips(E1,_,_,_) :- E1 \= [],displayequips(E1,farm).
-cekequips(_,E2,_,_) :- E2 \= [], displayequips(E2,fish).
-cekequips(_,_,E3,_) :- E3 \= [],displayequips(E3,ranch1).
-cekequips(_,_,_,E4) :- E4 \= [], displayequips(E4,ranch2).
+cekequips(E1,E2,E3,E4) :- 
+	(
+		E1 \= [] -> displayequips(E1,farm),
+		E2 \= [] -> displayequips(E2,fish),
+		E3 \= [] -> displayequips(E3,ranch1),
+		E4 \= [] -> displayequips(E4,ranch2), !;
+		write('')
+	).
 
 displayequips([A|_],J):- 
 	player(_,_,Level_Farming,_,Level_Fishing,_,Level_Ranching,_,_,_),
 	(J == farm->
 		equipments(No,J,A,Level_Farming,_,Pr),
-		format("~w. ~w level ~w (~w golds)\n",[No,A,Level_Farming,Pr]);
+		format("~w. ~w level ~w (~w golds)\n",[No,A,Level_Farming,Pr]), !;
 	J == fish->
 		equipments(No,J,A,Level_Fishing,_,Pr),
-		format("~w. ~w level ~w (~w golds)\n",[No,A,Level_Fishing,Pr]);
+		format("~w. ~w level ~w (~w golds)\n",[No,A,Level_Fishing,Pr]), !;
 	J == ranch1->
 		equipments(No,J,A,Level_Ranching,_,Pr),
-		format("~w. ~w level ~w (~w golds)\n",[No,A,Level_Ranching,Pr]);
-	
+		format("~w. ~w level ~w (~w golds)\n",[No,A,Level_Ranching,Pr]), !;
+	J == ranch2 ->
 		equipments(No,J,A,Level_Ranching,_,Pr),
 		format("~w. ~w level ~w (~w golds)\n",[No,A,Level_Ranching,Pr])).
 	
@@ -102,6 +106,7 @@ filterkuantity([H1|T1],[H2|T2]):-
 sold(Selling) :- 
 	inventory([Selling,Kuantity,0,Price],sell), Kuantity > 0 -> 
 		write('How many do you want to sell?'),
+		write('>> '),
 		read(Tmb),Tmb=<Kuantity,!,Tmb>0,!,
 		Hasil is Kuantity-Tmb,
 		player(_,_,_,_,_,_,_,_,_,Gold),
@@ -120,11 +125,16 @@ sold(Selling) :-
 
 %membaca jenis item yang dibeli
 readingjenis :- 
-	write('which item do you want to buy press 1(item)/2(equipment)?\n'),
+	write('Which item do you want to buy?\n'),
+	write('1. item\n'),
+	write('2. equipment\n'),
+	write('>> '),
 	read(Choice),nl,
-	((Choice =:= 1) ->  write('which item do you want to buy?'),
+	((Choice =:= 1) ->  write('which item do you want to buy(1-7)?\n'),
+						write('>> '),
 						read(Pickitem), readingquantityitem(Pickitem);
-	(Choice =:= 2) ->	write('which equipment do you want to buy?'),
+	(Choice =:= 2) ->	write('which equipment do you want to buy(1-4)?\n'),
+						write('>> '),
 						read(Pickequipment), readingquantityequip(Pickequipment);
 	write('Wrong choice! Can only enter 1 or 2')), !.
 
@@ -133,6 +143,7 @@ readingjenis :-
 readingquantityitem(Hitungi) :- 
 	((Hitungi < 8, Hitungi > 0) ->  
 		write('How many do you want to buy?\n'),
+		write('>> '),
 		read(Jumlah),
 
 		((Jumlah > 0)-> 
@@ -146,31 +157,31 @@ readingquantityitem(Hitungi) :-
 	write('not a valid choice, please enter a valid one')).
 
 
-readingquantityequip(Hitunge) :- (Hitunge < 5, Hitunge > 0),player(_,_,Lvlfarm,_,Lvlfish,_,Lvlranch,_,_,_),
+readingquantityequip(Hitunge) :- player(_,_,Lvlfarm,_,Lvlfish,_,Lvlranch,_,_,_),
 								 (Hitunge == 1,
 								 	equipments(Hitunge,_,Nama,Lvlfarm,Am,Cost1), Am == 1 -> write('Okay, buying '),
 								 														   write(Nama), write(' Level '), write(Lvlfarm),
-								 														   write(' in total '), write(Cost1), write(' gold.'),
+								 														   write(' in total '), write(Cost1), write(' gold.\n'),
 								 														   checkingmoney(Cost1,Temp),addequip(Hitunge,Lvlfarm,Temp)
 								 														   ;
 								 Hitunge == 2,
 								 	equipments(Hitunge,_,Nama,Lvlfish,Am,Cost2), Am == 1 -> write('Okay, buying '),
 								 														   write(Nama), write(' Level '), write(Lvlfish),
-								 														   write(' in total '), write(Cost2), write(' gold.'),
+								 														   write(' in total '), write(Cost2), write(' gold.\n'),
 																						   checkingmoney(Cost2,Temp),
 																						   addequip(Hitunge,Lvlfish,Temp)
 								 														   ;
 								 Hitunge == 3,
 								 	equipments(Hitunge,_,Nama,Lvlranch,Am,Cost3), Am == 1 -> write('Okay, buying '),
 								 														   write(Nama), write(' Level '), write(Lvlranch),
-								 														   write(' in total '), write(Cost3), write(' gold.'),
+								 														   write(' in total '), write(Cost3), write(' gold.\n'),
 																						   checkingmoney(Cost3,Temp),addequip(Hitunge,Lvlranch,Temp)
 								 														   ;
 
 								 Hitunge == 4,
 								 	equipments(Hitunge,_,Nama,Lvlranch,Am,Cost4), Am == 1 -> write('Okay, buying '),
 								 														   write(Nama), write(' Level '), write(Lvlranch),
-								 														   write(' in total '), write(Cost4), write(' gold.'),
+								 														   write(' in total '), write(Cost4), write(' gold.\n'),
 								 														   checkingmoney(Cost4,Temp),addequip(Hitunge,Lvlranch,Temp)
 								 														   ;
 								 write('Wrong choice, put in a valid one!')).
@@ -209,12 +220,9 @@ addequip(Notambahinventequip,Lvl, Bool) :-
 
 	(Bool == 1 ->
 		equipments(Notambahinventequip,Namajenis,Nama,Lvl,M3,Price1), inventory([Nama,Kuantitas,Level,Price2],Jenis),
-
-		K2 is 1,
+		K2 is Kuantitas + 1,
 		retractall(inventory([Nama,Kuantitas,Level,Price2],_)),
 		assertz(inventory([Nama,K2,Lvl,Price2],Jenis)),
-		retract(equipments(Notambahinventequip,Namajenis,Nama,Lvl,M3,Price1)),
-		assertz(equipments(Notambahinventequip,Namajenis,Nama,Lvl,0,Price1)),
 		format("Purchase ~w Level ~w succeded",[Nama,Lvl]);
 
 	write('\nMoney is not reduced!')).
