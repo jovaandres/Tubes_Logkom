@@ -114,12 +114,28 @@ writeListDiary([H|T], X) :-
     writeListDiary(T, X).
 
 readDiary :-
-    write('Here are the list of your entries'), nl,
+    running(_),
+    playerPosition(A, O),
+    houseLoc(A, O),
     listDiary(L),
+    \+ L==[],
+    write('Here are the list of your entries'), nl,
     writeListDiary(L, _X), nl,
     write('Which entri do you want to read?'), nl,
     write('> '), read(D),
     number_atom(D, Datom),
     atom_concat('MyDiary/Day', Datom, _Fname1),
     atom_concat(_Fname1, '.txt', Fname),
-    see(Fname), process_file, seen.
+    see(Fname), process_file, seen, !.
+
+readDiary :-
+    running(_),
+    playerPosition(A, O),
+    houseLoc(A, O),
+    listDiary(L),
+    L == [],
+    write('You haven\'t written any diaries yet'), nl, !.
+
+readDiary :-
+    running(_),
+    write('You can only read your diary in your house!\n').
