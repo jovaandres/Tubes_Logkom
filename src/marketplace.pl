@@ -87,7 +87,8 @@ displayequips([A|_],J):-
 bahansell :- 
 	write('Items you have in your inventory to sell\n'),
 	createlistsell(N,M),
-	filterkuantity(N,M), 
+	filterkuantity(N,M), write('what do you want to sell? (Put in the name below)\n'),
+	write('>> '),
 	read(Selling),
 	sold(Selling).
 
@@ -105,20 +106,23 @@ filterkuantity([H1|T1],[H2|T2]):-
 %operasi sell
 sold(Selling) :- 
 	inventory([Selling,Kuantity,0,Price],sell), Kuantity > 0 -> 
-		write('How many do you want to sell?'),
+		write('How many do you want to sell?\n'),
 		write('>> '),
-		read(Tmb),Tmb=<Kuantity,!,Tmb>0,!,
-		Hasil is Kuantity-Tmb,
-		player(_,_,_,_,_,_,_,_,_,Gold),
-		Earn is (Price * Tmb) + Gold,
-		retract(player(_,_,_,_,_,_,_,_,_,Gold)),
-		assertz(player(_,_,_,_,_,_,_,_,_,Earn)),
-		retractall(inventory([Selling,Kuantity,_,_],_)),
-		assertz(inventory([Selling,Hasil,0,Price],sell)),
-		format("Now you have ~w Golds (before ~w)!\nItem ~w is now ~w", [Earn,Gold,Selling,Hasil]);
-		Selling == 0 -> write('exiting...'),!;
-	write('invalid name! Or Quantity is 0').
-
+		read(Tmb),
+		(Tmb=<Kuantity,Tmb>0 ->
+			Hasil is Kuantity-Tmb,
+			player(A,B,C,D,E,F,G,H,I,Gold),
+			Earn is (Price * Tmb) + Gold,
+			retract(player(_,_,_,_,_,_,_,_,_,Gold)),
+			assertz(player(A,B,C,D,E,F,G,H,I,Earn)),
+			retractall(inventory([Selling,Kuantity,_,_],_)),
+			assertz(inventory([Selling,Hasil,0,Price],sell)),
+			format("Now you have ~w Golds (before ~w)!\nItem ~w is now ~w", [Earn,Gold,Selling,Hasil]);
+			Selling == 0 -> write('exiting...'),!;
+		Tmb > Kuantity ->
+			format("you don't have enough ~w to sell that much!", [Selling]);
+		write('invalid name, number, or quantity is 0'));
+	write('You don\'t have any items to sell! Come back later when you got something for me...').
 
 
 /****************Back to buying****************/
@@ -139,25 +143,27 @@ readingjenis :-
 	write('Wrong choice! Can only enter 1 or 2')), !.
 
 
-%menilai input pengguna jika kuantitas benar dan option benar
+% menilai input pengguna jika kuantitas benar dan option benar
 readingquantityitem(Hitungi) :- 
 	((Hitungi < 8, Hitungi > 0) ->  
 		write('How many do you want to buy?\n'),
 		write('>> '),
-		read(Jumlah),
+		read(Jumlah),seratusitem(R,Jumlah),
 
-		((Jumlah > 0)-> 
+		((Jumlah > 0),  R =:= 0 ->
 			beliitems(Hitungi,X,Y),
 			J1 is (Jumlah * Y),
 			write('Okay, buying '), write(Jumlah), write(' '), write(X),
 			write(', in total is '), write(J1), write(' golds.\n'),
 			checkingmoney(J1,Temp), additem(Hitungi,Jumlah,Temp);
-		write('Wrong amount of items, put in a valid one.'));
+		R =:= 1 ->
+			write('You don\'t have enough space to buy all of these items in your inventory');
+		write('Wrong amount of items, put in a valid one .'));
 
 	write('not a valid choice, please enter a valid one')).
 
 
-readingquantityequip(Hitunge) :- player(_,_,Lvlfarm,_,Lvlfish,_,Lvlranch,_,_,_),
+readingquantityequip(Hitunge) :- player(_,_,Lvlfarm,_,Lvlfish,_,Lvlranch,_,_,_),seratusitem(R,1),  R =:= 0 ->
 								 (Hitunge == 1,
 								 	equipments(Hitunge,_,Nama,Lvlfarm,Am,Cost1), Am == 1 -> write('Okay, buying '),
 								 														   write(Nama), write(' Level '), write(Lvlfarm),
@@ -184,21 +190,23 @@ readingquantityequip(Hitunge) :- player(_,_,Lvlfarm,_,Lvlfish,_,Lvlranch,_,_,_),
 								 														   write(' in total '), write(Cost4), write(' gold.\n'),
 								 														   checkingmoney(Cost4,Temp),addequip(Hitunge,Lvlranch,Temp)
 								 														   ;
-								 write('Wrong choice, put in a valid one!')).
+								 write('Wrong choice, put in a valid one!'));
+								 write('You don\'t have enough space in your bag! Cancelling purchase...').
 
 
 
 %mengecek jumlah uang, untuk keduanya
 
 checkingmoney(Totalbuy,Temp) :- 
-	player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, Money), 
-	((Totalbuy < Money) -> 
-			M1 is Money-Totalbuy,
-			retract(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, _)),
-    		assertz(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, M1)),
-    		Temp is 1;
-    Temp is 0,
-    write('\nTo bad your money is not enough, canceling ...'),!).
+	player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, Money)->
+		((Totalbuy =< Money) -> 
+				M1 is Money-Totalbuy,
+				retract(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, _)),
+				assertz(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, M1)),
+				Temp is 1;
+		Temp is 0,
+		write('\nTo bad your money is not enough, come by later when you have enough money! canceling ...'),!).
+	
 
 
 
@@ -219,7 +227,7 @@ additem(Notambahinvent,Kuantambahinvent,Bool) :-
 addequip(Notambahinventequip,Lvl, Bool) :-
 
 	(Bool == 1 ->
-		equipments(Notambahinventequip,Namajenis,Nama,Lvl,M3,Price1), inventory([Nama,Kuantitas,Level,Price2],Jenis),
+		equipments(Notambahinventequip,_,Nama,Lvl,_,_), inventory([Nama,Kuantitas,Level,Price2],Jenis),
 		K2 is Kuantitas + 1,
 		retractall(inventory([Nama,Kuantitas,Level,Price2],_)),
 		assertz(inventory([Nama,K2,Lvl,Price2],Jenis)),
