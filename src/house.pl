@@ -1,12 +1,8 @@
 :- dynamic(listDiary/1).
 
 listDiary([]).
-/***************************** Write Diary *****************************/
-fileName(Fname) :-
-    day(_X),
-    number_atom(_X, _Xatom),
-    atom_concat('MyDiary/Day', _Xatom, _Fname1),
-    atom_concat(_Fname1, '.txt', Fname).
+
+/***************************** SLEEPING *****************************/
 
 teleOptions:-
     dimension(X0, Y0),
@@ -70,7 +66,29 @@ sleeping :-
     running(_),
     write('Are you sure you want to sleep here? Come on! You have your own house.\n').
 
+/***************************** WRITE DIARY *****************************/
 /* jika diary lebih dari 1 kata maka wajib menggunakan ''. */
+
+fileName(Fname) :-
+    day(_X),
+    number_atom(_X, _Xatom),
+    atom_concat('MyDiary/Day', _Xatom, _Fname1),
+    atom_concat(_Fname1, '.txt', Fname).
+
+lastElmt([X],X) :- !.
+lastElmt([_|T],X) :- lastElmt(T,X).
+
+% jika ingin mengupdate isi diary yang sudah pernah ditulis pada hari itu, list tidak perlu diappend
+updateListDiary(L, [X], Lnew) :-
+    L \= [],
+    lastElmt(L, Last),
+    Last == X,
+    Lnew = L.
+% jika diary baru pertama kali ditulis pada hari itu, maka list akan diappend
+updateListDiary(L, [X], Lnew) :-
+    ((lastElmt(L, Last), Last \= X) ; (L == [])),
+    append(L, [X], Lnew).
+
 writeDiary :-
     running(_),
     playerPosition(A, O),
@@ -79,7 +97,7 @@ writeDiary :-
     fileName(_Fname),
     write('Write your diary for day '), write(X), write(:), nl,
     open(_Fname, write, Stream),
-    read(Diary),
+    write('> '), read(Diary),
     write(Stream, '\''),
     write(Stream, Diary),
     write(Stream, '\''),
@@ -87,7 +105,7 @@ writeDiary :-
     nl(Stream),
     close(Stream),
     listDiary(L),
-    append(L, [X], Lnew),
+    updateListDiary(L, [X], Lnew),
     retractall(listDiary(_)),
     assertz(listDiary(Lnew)), !.
 
@@ -126,6 +144,7 @@ readDiary :-
     number_atom(D, Datom),
     atom_concat('MyDiary/Day', Datom, _Fname1),
     atom_concat(_Fname1, '.txt', Fname),
+    write('Here is your entry for day '), write(D), write(':\n'),
     see(Fname), process_file, seen, !.
 
 readDiary :-
