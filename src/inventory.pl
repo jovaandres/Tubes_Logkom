@@ -2,19 +2,19 @@
 :- dynamic(inventory/2).
 
 initInventory:-
-    asserta(inventory([salmon, 1, 0, 200],sell)),
-    asserta(inventory([mackeral, 4, 0, 150],sell)),
-    asserta(inventory([tuna, 2, 0, 175],sell)),
+    asserta(inventory([salmon, 0, 0, 200],sell)),
+    asserta(inventory([mackeral, 0, 0, 150],sell)),
+    asserta(inventory([tuna, 0, 0, 175],sell)),
 
-    asserta(inventory([cornSeed, 70, 0, 50],buy)),
+    asserta(inventory([cornSeed, 1, 0, 50],buy)),
     asserta(inventory([tomatoSeed, 1, 0, 50],buy)),
     asserta(inventory([carrotSeed, 1, 0, 50],buy)),
     asserta(inventory([potatoSeed, 1, 0, 50],buy)),
 
-    asserta(inventory([corn, 2, 0, 75],sell)),
-    asserta(inventory([tomato, 5, 0, 75],sell)),
-    asserta(inventory([carrot, 1, 0, 75],sell)),
-    asserta(inventory([potato, 3, 0, 75],sell)),
+    asserta(inventory([corn, 0, 0, 75],sell)),
+    asserta(inventory([tomato, 0, 0, 75],sell)),
+    asserta(inventory([carrot, 0, 0, 75],sell)),
+    asserta(inventory([potato, 0, 0, 75],sell)),
 
     asserta(inventory([chicken, 1, 0, 500],sell)),
     asserta(inventory([sheep, 1, 0, 1000],sell)),
