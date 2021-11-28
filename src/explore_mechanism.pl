@@ -30,7 +30,7 @@ dayUpdateNotes:-
     RemainingTime is 365 - D,
     (
         RemainingTime > 0 -> write('You still have '), write(RemainingTime) , write(' day to pay off your debt, if you can\'t... well'), nl, !;
-        write('This is your last chance, do your best'), nl
+        write('This is your last chance, do your best'), nl, !
     ).
 
 dayUpdateNotes:-

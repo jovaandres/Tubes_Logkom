@@ -37,4 +37,13 @@ checkGoal:-
     player(_, _, _, _, _, _, _, _, _, Gold),
     goal(G),
     Gold >= G,
-    write('Congratulations! You have finally collected 20000 golds!'), !.
+    write('Congratulations! You have finally collected 20000 golds!\n'),
+    write('Continue playing?'), nl,
+    write('1. Yes'), nl,
+    write('2. No'), nl,
+    write('>> '), read(Y),
+    (
+        Y == 1 -> write('');
+        Y == 2 -> quit, !;
+        write('Wrong choice')
+    ).

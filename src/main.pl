@@ -15,18 +15,84 @@
 
 help:-
     initialized(_),
+    write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n'),
+    write('%                       ~Harvest Star~                         %\n'),
+    write('%  1. start      : untuk memulai petualanganmu                 %\n'),
+    write('%  2. map        : menampilkan peta                            %\n'),
+    write('%  3. status     : menampilkan kondisimu terkini               %\n'),
+    write('%  4. w          : gerak ke utara 1 langkah                    %\n'),
+    write('%  5. a          : gerak ke selatan 1 langkah                  %\n'),
+    write('%  6. s          : gerak ke ke timur 1 langkah                 %\n'),
+    write('%  7. d          : gerak ke barat 1 langkah                    %\n'),
+    write('%  8. help       : menampilkan segala bantuan                  %\n'),
+    write('%  9. questhelp  : menampilkan bantuan quest                   %\n'),
+    write('%  10.househelp  : menampilkan perintah di house               %\n'),
+    write('%  11.markethelp : menampilkan perintah di marketplace         %\n'),
+    write('%  12.farmhelp   : menampilkan perintah untuk farmin           %\n'),
+    write('%  13.ranchhelp  : menampilkan perintah untuk ranching         %\n'),
+    write('%  14.fishhelp   : menampilkan perintah untuk fishing          %\n'),
+    write('%                                                              %\n'),
+    write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n').
+
+questhelp:-
+    initialized(_),
     write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n'),
-    write('%                       ~Harvest Star~                     %\n'),
-    write('%  1. start  : untuk memulai petualanganmu                 %\n'),
-    write('%  2. map    : menampilkan peta                            %\n'),
-    write('%  3. status : menampilkan kondisimu terkini               %\n'),
-    write('%  4. w      : gerak ke utara 1 langkah                    %\n'),
-    write('%  5. a      : gerak ke selatan 1 langkah                  %\n'),
-    write('%  6. s      : gerak ke ke timur 1 langkah                 %\n'),
-    write('%  7. d      : gerak ke barat 1 langkah                    %\n'),
-    write('%  8. help   : menampilkan segala bantuan                  %\n'),
+    write('%                                                          %\n'),
+    write('%                       ~Quest!!!~                         %\n'),
+    write('%  1. quest  : menampilkan informasi quest saat ini        %\n'),
     write('%                                                          %\n'),
     write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n').
+
+househelp:-
+    initialized(_),
+    write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n'),
+    write('%                                                          %\n'),
+    write('%                     ~HOMESWEETHOME~                      %\n'),
+    write('%  1. sleeping  : tidur (hari berganti)                    %\n'),
+    write('%  2. writeDiary: menuliskan diary                         %\n'),
+    write('%  3. readDiary : membaca diary yang sudah pernah ditulis  %\n'),
+    write('%                                                          %\n'),
+    write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n').
+
+markethelp:-
+    initialized(_),
+    write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n'),
+    write('%                                                          %\n'),
+    write('%                      ~MarketPlace~                       %\n'),
+    write('%  1. market  : menampilkan informasi marketplace          %\n'),
+    write('%  2. buy     : membeli barang di marketplace              %\n'),
+    write('%  3. sell    : menjual barang ke marketplace              %\n'),
+    write('%                                                          %\n'),
+    write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n').
+
+farmhelp:-
+    initialized(_),
+    write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n'),
+    write('%                                        %\n'),
+    write('%            ~Farming~                   %\n'),
+    write('%  1. dig     : menggali tanah           %\n'),
+    write('%  2. plant   : menanam tanaman          %\n'),
+    write('%  3. harvest : memanen tanaman          %\n'),
+    write('%                                        %\n'),
+    write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n').
+
+ranchhelp:-
+    initialized(_),
+    write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n'),
+    write('%                                                          %\n'),
+    write('%                       ~Ranching~                         %\n'),
+    write('%  1. ranch   : mengecek/mengambil hasil ternak            %\n'),
+    write('%                                                          %\n'),
+    write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n').
+
+fishhelp:-
+    initialized(_),
+    write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n'),
+    write('%                                    %\n'),
+    write('%             ~Fishing~              %\n'),
+    write('%  1. fishing : memancing ikan       %\n'),
+    write('%                                    %\n'),
+    write('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n').
 
 % Inisiasi Game
 startGame:-

@@ -183,6 +183,7 @@ updateGoldRancher :-
     GoldPlayer1 is GoldPlayer + 20,
     retract(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, GoldPlayer)),
     assertz(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, GoldPlayer1)),
+    checkGoal,
     write('Congrats! You got 20 golds as bonus...'), nl.
 
 updateGoldRancher.
