@@ -46,33 +46,36 @@ checkFish(1) :-
     expFishingReward(N),
     player(_, _, _, _, LevelFishing, _, _, _, _, _),
     write('You got '), write(LevelFishing), write(' mackeral!!'), nl,
-    write('You gained '), write(N), write(' fishing exp!!'),
+    write('You gained '), write(N), write(' fishing exp!!'), nl,
     inventory([mackeral, Quantity, Level, Price], X),
     Quantity1 is Quantity + LevelFishing,
     retractall(inventory([mackeral, _, _, _], X)),
     assertz(inventory([mackeral, Quantity1, Level, Price], X)),
+    updateGoldFisher,
     succedFishing.
 
 checkFish(2) :-
     expFishingReward(N),
     player(_, _, _, _, LevelFishing, _, _, _, _, _),
     write('You got '), write(LevelFishing), write(' tuna!!'), nl,
-    write('You gained '), write(N), write(' fishing exp!!'),
+    write('You gained '), write(N), write(' fishing exp!!'), nl,
     inventory([tuna, Quantity, Level, Price], X),
     Quantity1 is Quantity + LevelFishing,
     retractall(inventory([tuna, _, _, _], X)),
     assertz(inventory([tuna, Quantity1, Level, Price], X)),
+    updateGoldFisher,
     succedFishing.
 
 checkFish(3) :-
     expFishingReward(N),
     player(_, _, _, _, LevelFishing, _, _, _, _, _),
     write('You got '), write(LevelFishing), write(' salmon!!'), nl,
-    write('You gained '), write(N), write(' fishing exp!!'),
+    write('You gained '), write(N), write(' fishing exp!!'), nl,
     inventory([salmon, Quantity, Level, Price], X),
     Quantity1 is Quantity + LevelFishing,
     retractall(inventory([salmon, _, _, _], X)),
     assertz(inventory([salmon, Quantity1, Level, Price], X)),
+    updateGoldFisher,
     succedFishing.
 
 /* Apabila berhasil menangkap ikan, jumlah ikan tangkapan harian akan ditambah,
@@ -104,6 +107,17 @@ updateExpFishing :-
     retract(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, GoldPlayer)),
     assertz(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing1, LevelRanching, ExpRanching, ExpPlayer, GoldPlayer)),
     updateLevelFishing(ExpFishing1).
+
+/* Jika spesialisasi fisherman, maka akan mendapatkan tambahan gold sebanyak 20 saat panen */
+updateGoldFisher :-
+    player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, GoldPlayer),
+    Job == fisherman,
+    GoldPlayer1 is GoldPlayer + 20,
+    retract(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, GoldPlayer)),
+    assertz(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, GoldPlayer1)),
+    write('Congrats! You got 20 golds as bonus...'), nl.
+
+updateGoldFisher.
 
 /* Apabila exp melebihi batas untuk naik level, level akan terupdate */
 updateLevelFishing(Exp) :-

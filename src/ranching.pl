@@ -48,6 +48,7 @@ ranching(1) :-
     write('You gained '), write(N), write(' ranching exp!!'), nl,
     updateEggsQuest,
     updateExpRanching,
+    updateGoldRancher,
     retractall(ranchedItems([egg, _])),
     assertz(ranchedItems([egg, 3])).
 
@@ -73,6 +74,7 @@ ranching(2) :-
     write('You got '), write(SheepQuantity1), write(' wools!!'), nl,
     write('You gained '), write(N), write(' ranching exp!!'), nl,
     updateExpRanching,
+    updateGoldRancher,
     retractall(ranchedItems([wool, _])),
     assertz(ranchedItems([wool, 10])).
 
@@ -98,6 +100,7 @@ ranching(3) :-
     write('You got '), write(CowQuantity1), write(' milks!!'), nl,
     write('You gained '), write(N), write(' ranching exp!!'), nl,
     updateExpRanching,
+    updateGoldRancher,
     retractall(ranchedItems([susu, _])),
     assertz(ranchedItems([susu, 5])).
 
@@ -172,6 +175,17 @@ updateExpRanchingReward :-
     N1 is N + 10,
     retractall(expRanchingReward(_)),
     assertz(expRanchingReward(N1)).
+
+/* Jika spesialisasi fisherman, maka akan mendapatkan tambahan gold sebanyak 20 saat panen */
+updateGoldRancher :-
+    player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, GoldPlayer),
+    Job == rancher,
+    GoldPlayer1 is GoldPlayer + 20,
+    retract(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, GoldPlayer)),
+    assertz(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, GoldPlayer1)),
+    write('Congrats! You got 20 golds as bonus...'), nl.
+
+updateGoldRancher.
 
 /* Jika berganti hari, waktu hewan memproduksi hasil ternak akan berkurang */
 updateRanchedItems :-
