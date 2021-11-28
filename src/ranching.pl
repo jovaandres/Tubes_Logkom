@@ -34,12 +34,13 @@ ranch :-
 ranching(1) :-
     ranchedItems([egg, RemainingTime]),
     RemainingTime == 0,
-    !,
     inventory([chicken, ChickenQuantity, _, _], X),
     inventory([egg, EggQuantity, Level, Price], X),
     player(_, _, _, _, _, _, LevelRanching, _, _, _),
     ChickenQuantity1 is ChickenQuantity * LevelRanching,
     EggQuantity1 is EggQuantity + ChickenQuantity1,
+    seratusitem(B,ChickenQuantity1),
+    B == 0, !,
     retractall(inventory([egg, _, _, _], X)),
     assertz(inventory([egg, EggQuantity1, Level, Price], X)),
     expRanchingReward(N),
@@ -53,7 +54,7 @@ ranching(1) :-
     assertz(ranchedItems([egg, 3])).
 
 ranching(1) :-
-    ranchedItems([egg, RemainingTime]),
+    ranchedItems([egg, RemainingTime]),RemainingTime > 0, !,
     write('Your chicken has not produced any egg yet :('), nl,
     write('It will lay some eggs in '), write(RemainingTime), write(' days..'), nl,
     write('Please check again later..'), nl.
@@ -61,12 +62,13 @@ ranching(1) :-
 ranching(2) :-
     ranchedItems([wool, RemainingTime]),
     RemainingTime == 0,
-    !,
     inventory([sheep, SheepQuantity, _, _], X),
     inventory([wool, WoolQuantity, Level, Price], X),
     player(_, _, _, _, _, _, LevelRanching, _, _, _),
     SheepQuantity1 is SheepQuantity * LevelRanching,
     WoolQuantity1 is WoolQuantity + SheepQuantity1,
+    seratusitem(B,SheepQuantity1),
+    B == 0,!,
     retractall(inventory([wool, _, _, _], X)),
     assertz(inventory([wool, WoolQuantity1, Level, Price], X)),
     expRanchingReward(N),
@@ -79,7 +81,7 @@ ranching(2) :-
     assertz(ranchedItems([wool, 10])).
 
 ranching(2) :-
-    ranchedItems([wool, RemainingTime]),
+    ranchedItems([wool, RemainingTime]), RemainingTime > 0, !,
     write('Your sheep has not produced any wool yet :('), nl,
     write('It will produce some wools in '), write(RemainingTime), write(' days..'), nl,
     write('Please check again later..'), nl.
@@ -87,12 +89,13 @@ ranching(2) :-
 ranching(3) :-
     ranchedItems([susu, RemainingTime]),
     RemainingTime == 0,
-    !,
     inventory([cow, CowQuantity, _, _], X),
     inventory([susu, SusuQuantity, Level, Price], X),
     player(_, _, _, _, _, _, LevelRanching, _, _, _),
     CowQuantity1 is CowQuantity * LevelRanching,
     SusuQuantity1 is SusuQuantity + CowQuantity1,
+    seratusitem(B,CowQuantity1),
+    B == 0,!,
     retractall(inventory([susu, _, _, _], X)),
     assertz(inventory([susu, SusuQuantity1, Level, Price], X)),
     expRanchingReward(N),
@@ -105,10 +108,15 @@ ranching(3) :-
     assertz(ranchedItems([susu, 5])).
 
 ranching(3) :-
-    ranchedItems([susu, RemainingTime]),
+    ranchedItems([susu, RemainingTime]), RemainingTime > 0, !,
     write('Your cow has not produced any milk yet :('), nl,
     write('It will produce some milks in '), write(RemainingTime), write(' days..'), nl,
     write('Please check again later..'), nl.
+
+/* Message kalau inventory penuh */
+ranching(_) :-
+    write('Oh shoot! There\'s not much room for these ranching items, gotta free some space in my inventory first.'),nl,
+    write('I\'ll come back later!'),nl.
 
 /* Apabila ranching berhasil, maka jumlah Exp Ranching akan terupdate */
 updateExpRanching :-

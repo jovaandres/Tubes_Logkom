@@ -58,12 +58,12 @@ harvest :-
 
 /**********************    Planting    *******************/
 planting(1, X, Y) :-
-    inventory([cornSeed, CornSeedQty, _, _], _),
+    inventory([cornSeed, CornSeedQty, Level, Price], B),
     CornSeedQty > 0,
     plantedItems([cornSeed, HarvestTime]),
     asserta(planted(corn, HarvestTime, X, Y)),
     CornSeedQty1 is CornSeedQty - 1,
-    retractall(inventory([cornSeed, _, Level, Price], B)),
+    retractall(inventory([cornSeed, _, _, _], _)),
     assertz(inventory([cornSeed, CornSeedQty1, Level, Price], B)),
     write('Corn has been planted\n').
 
@@ -73,12 +73,12 @@ planting(1, _, _) :-
     write('Can\'t plant corn because you don\'t have enough seed\n').
 
 planting(2, X, Y) :-
-    inventory([tomatoSeed, TomatoSeedQty, _, _], _),
+    inventory([tomatoSeed, TomatoSeedQty, Level, Price], B),
     TomatoSeedQty > 0,
     plantedItems([tomatoSeed, HarvestTime]),
     asserta(planted(tomato, HarvestTime, X, Y)),
     TomatoSeedQty1 is TomatoSeedQty - 1,
-    retractall(inventory([tomatoSeed, _, Level, Price], B)),
+    retractall(inventory([tomatoSeed, _, _, _], _)),
     assertz(inventory([tomatoSeed, TomatoSeedQty1, Level, Price], B)),
     write('Tomato has been planted\n').
 
@@ -88,12 +88,12 @@ planting(2, _, _) :-
     write('Can\'t plant tomato because you don\'t have enough seed\n').
 
 planting(3, X, Y) :-
-    inventory([carrotSeed, CarrotSeedQty, _, _], _),
+    inventory([carrotSeed, CarrotSeedQty, Level, Price], B),
     CarrotSeedQty > 0,
     plantedItems([carrotSeed, HarvestTime]),
     asserta(planted(carrot, HarvestTime, X, Y)),
     CarrotSeedQty1 is CarrotSeedQty - 1,
-    retractall(inventory([carrotSeed, _, Level, Price], B)),
+    retractall(inventory([carrotSeed, _, _, _], _)),
     assertz(inventory([carrotSeed, CarrotSeedQty1, Level, Price], B)),
     write('Carrot has been planted\n').
 
@@ -103,12 +103,12 @@ planting(3, _, _) :-
     write('Can\'t plant carrot because you don\'t have enough seed\n').
 
 planting(4, X, Y) :-
-    inventory([potatoSeed, PotatoSeedQty, _, _], _),
+    inventory([potatoSeed, PotatoSeedQty, Level, Price], B),
     PotatoSeedQty > 0,
     plantedItems([potatoSeed, HarvestTime]),
     asserta(planted(potato, HarvestTime, X, Y)),
     PotatoSeedQty1 is PotatoSeedQty - 1,
-    retractall(inventory([potatoSeed, _, Level, Price], B)),
+    retractall(inventory([potatoSeed, _, _, _], _)),
     assertz(inventory([potatoSeed, PotatoSeedQty1, Level, Price], B)),
     write('Potato has been planted\n').
 
@@ -121,11 +121,11 @@ planting(4, _, _) :-
 harvesting(corn, X, Y)  :-
     planted(corn, RemainingTime, X, Y),
     RemainingTime == 0,
-    !,
-    inventory([corn, CornQty, Level, Price], _),
+    inventory([corn, CornQty, Level, Price], S),
     player(_, _, LevelFarming, _, _, _, _, _, _, _),
     CornQty1 is CornQty + LevelFarming,
-    retractall(inventory([corn, _, _, _], S)),
+    seratusitem(C,LevelFarming), C == 0, !,
+    retractall(inventory([corn, _, _, _], _)),
     assertz(inventory([corn, CornQty1, Level, Price], S)),
     expFarmingReward(N),
     write('You got '), write(LevelFarming), write(' corn!!'), nl,
@@ -136,7 +136,7 @@ harvesting(corn, X, Y)  :-
     retractall(planted(corn, RemainingTime, X, Y)), !.
 
 harvesting(corn, X, Y) :-
-    planted(corn, RemainingTime, X, Y),
+    planted(corn, RemainingTime, X, Y), RemainingTime > 0, !,
     write('Your corn is not ready to harvest yet:('), nl,
     write('It will ready in '), write(RemainingTime), write(' days..'), nl,
     write('Please check again later..'), nl.  
@@ -146,11 +146,11 @@ harvesting(corn, X, Y) :-
 harvesting(tomato, X, Y) :-
     planted(tomato, RemainingTime, X, Y),
     RemainingTime == 0,
-    !,
-    inventory([tomato, TomatoQty, Level, Price], _),
+    inventory([tomato, TomatoQty, Level, Price], S),
     player(_, _, LevelFarming, _, _, _, _, _, _, _),
     TomatoQty1 is TomatoQty + LevelFarming,
-    retractall(inventory([tomato, _, _, _], S)),
+    seratusitem(C,LevelFarming), C == 0, !,
+    retractall(inventory([tomato, _, _, _], _)),
     assertz(inventory([tomato, TomatoQty1, Level, Price], S)),
     expFarmingReward(N),
     write('You got '), write(LevelFarming), write(' tomato!!'), nl,
@@ -161,7 +161,7 @@ harvesting(tomato, X, Y) :-
     retractall(planted(tomato, RemainingTime, X, Y)).
 
 harvesting(tomato, X, Y) :-
-    planted(tomato, RemainingTime, X, Y),
+    planted(tomato, RemainingTime, X, Y), RemainingTime > 0, !,
     write('Your tomato is not ready to harvest yet:('), nl,
     write('It will ready in '), write(RemainingTime), write(' days..'), nl,
     write('Please check again later..'), nl.  
@@ -171,11 +171,11 @@ harvesting(tomato, X, Y) :-
 harvesting(carrot, X, Y)  :-
     planted(carrot, RemainingTime, X, Y),
     RemainingTime == 0,
-    !,
-    inventory([carrot, CarrotQty, Level, Price], _),
+    inventory([carrot, CarrotQty, Level, Price], S),
     player(_, _, LevelFarming, _, _, _, _, _, _, _),
     CarrotQty1 is CarrotQty + LevelFarming,
-    retractall(inventory([carrot, _, _, _], S)),
+    seratusitem(C,LevelFarming), C == 0,!,
+    retractall(inventory([carrot, _, _, _], _)),
     assertz(inventory([carrot, CarrotQty1, Level, Price], S)),
     expFarmingReward(N),
     write('You got '), write(LevelFarming), write(' carrot!!'), nl,
@@ -186,7 +186,7 @@ harvesting(carrot, X, Y)  :-
     retractall(planted(carrot, RemainingTime, X, Y)).
 
 harvesting(carrot, X, Y) :-
-    planted(carrot, RemainingTime, X, Y),
+    planted(carrot, RemainingTime, X, Y), RemainingTime > 0, !,
     write('Your carrot is not ready to harvest yet:('), nl,
     write('It will ready in '), write(RemainingTime), write(' days..'), nl,
     write('Please check again later..'), nl. 
@@ -196,11 +196,11 @@ harvesting(carrot, X, Y) :-
 harvesting(potato, X, Y)  :-
     planted(potato, RemainingTime, X, Y),
     RemainingTime == 0,
-    !,
-    inventory([potato, PotatoQty, Level, Price], _),
+    inventory([potato, PotatoQty, Level, Price], S),
     player(_, _, LevelFarming, _, _, _, _, _, _, _),
     PotatoQty1 is PotatoQty + LevelFarming,
-    retractall(inventory([potato, _, _, _], S)),
+    seratusitem(C,LevelFarming), C == 0, !,
+    retractall(inventory([potato, _, _, _], _)),
     assertz(inventory([potato, PotatoQty1, Level, Price], S)),
     expFarmingReward(N),
     write('You got '), write(LevelFarming), write(' potato!!'), nl,
@@ -211,10 +211,14 @@ harvesting(potato, X, Y)  :-
     retractall(planted(potato, RemainingTime, X, Y)).
 
 harvesting(potato, X, Y) :-
-    planted(potato, RemainingTime, X, Y),
+    planted(potato, RemainingTime, X, Y),  RemainingTime > 0, !,
     write('Your potato is not ready to harvest yet:('), nl,
     write('It will ready in '), write(RemainingTime), write(' days..'), nl,
     write('Please check again later..'), nl.
+
+/* Message Inventory penuh */
+harvesting(_,_,_):-
+    write('Oh no! I need to do something to my inventory in order to harvest these...').
 
 /* Apabila farming berhasil, maka jumlah Exp Farming akan terupdate */
 updateExpFarming :-

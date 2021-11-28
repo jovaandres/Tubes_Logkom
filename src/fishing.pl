@@ -45,10 +45,11 @@ checkFish(0) :-
 checkFish(1) :-
     expFishingReward(N),
     player(_, _, _, _, LevelFishing, _, _, _, _, _),
-    write('You got '), write(LevelFishing), write(' mackeral!!'), nl,
-    write('You gained '), write(N), write(' fishing exp!!'), nl,
     inventory([mackeral, Quantity, Level, Price], X),
     Quantity1 is Quantity + LevelFishing,
+    seratusitem(B, LevelFishing), B == 0, !,
+    write('You got '), write(LevelFishing), write(' mackeral!!'), nl,
+    write('You gained '), write(N), write(' fishing exp!!'), nl,
     retractall(inventory([mackeral, _, _, _], X)),
     assertz(inventory([mackeral, Quantity1, Level, Price], X)),
     updateGoldFisher,
@@ -57,10 +58,11 @@ checkFish(1) :-
 checkFish(2) :-
     expFishingReward(N),
     player(_, _, _, _, LevelFishing, _, _, _, _, _),
-    write('You got '), write(LevelFishing), write(' tuna!!'), nl,
-    write('You gained '), write(N), write(' fishing exp!!'), nl,
     inventory([tuna, Quantity, Level, Price], X),
     Quantity1 is Quantity + LevelFishing,
+    seratusitem(B, LevelFishing), B == 0, !,
+    write('You got '), write(LevelFishing), write(' tuna!!'), nl,
+    write('You gained '), write(N), write(' fishing exp!!'),
     retractall(inventory([tuna, _, _, _], X)),
     assertz(inventory([tuna, Quantity1, Level, Price], X)),
     updateGoldFisher,
@@ -69,15 +71,19 @@ checkFish(2) :-
 checkFish(3) :-
     expFishingReward(N),
     player(_, _, _, _, LevelFishing, _, _, _, _, _),
-    write('You got '), write(LevelFishing), write(' salmon!!'), nl,
-    write('You gained '), write(N), write(' fishing exp!!'), nl,
     inventory([salmon, Quantity, Level, Price], X),
     Quantity1 is Quantity + LevelFishing,
+    seratusitem(B, LevelFishing), B == 0, !,
+    write('You got '), write(LevelFishing), write(' salmon!!'), nl,
+    write('You gained '), write(N), write(' fishing exp!!'),
     retractall(inventory([salmon, _, _, _], X)),
     assertz(inventory([salmon, Quantity1, Level, Price], X)),
     updateGoldFisher,
     succedFishing.
 
+checkFish(_) :-
+    write('Ah, there\'s no room for me to keep the fishes, i should do something with my inventory').
+    
 /* Apabila berhasil menangkap ikan, jumlah ikan tangkapan harian akan ditambah,
    ExpFsihing bertambah, dan jumlah Fishing Quest akan berkurang */
 succedFishing :-
