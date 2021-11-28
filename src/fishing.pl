@@ -48,6 +48,7 @@ checkFish(1) :-
     inventory([mackeral, Quantity, Level, Price], X),
     Quantity1 is Quantity + LevelFishing,
     seratusitem(B, LevelFishing), B == 0, !,
+    gotFish,
     write('You got '), write(LevelFishing), write(' mackeral!!'), nl,
     write('You gained '), write(N), write(' fishing exp!!'), nl,
     retractall(inventory([mackeral, _, _, _], X)),
@@ -61,6 +62,7 @@ checkFish(2) :-
     inventory([tuna, Quantity, Level, Price], X),
     Quantity1 is Quantity + LevelFishing,
     seratusitem(B, LevelFishing), B == 0, !,
+    gotFish,
     write('You got '), write(LevelFishing), write(' tuna!!'), nl,
     write('You gained '), write(N), write(' fishing exp!!'),
     retractall(inventory([tuna, _, _, _], X)),
@@ -74,6 +76,7 @@ checkFish(3) :-
     inventory([salmon, Quantity, Level, Price], X),
     Quantity1 is Quantity + LevelFishing,
     seratusitem(B, LevelFishing), B == 0, !,
+    gotFish,
     write('You got '), write(LevelFishing), write(' salmon!!'), nl,
     write('You gained '), write(N), write(' fishing exp!!'),
     retractall(inventory([salmon, _, _, _], X)),
@@ -198,3 +201,23 @@ updateExpFishingReward :-
 resetCountFish :-
     retractall(countFish(_)),
     assertz(countFish(0)).
+
+gotFish:-
+    nl,                                                             
+    write('                            `-//+//-`                                      '), nl,
+    write('                         `:sys++/+oyhh+.                                   '), nl,
+    write('                        :o/.`       `-+hs.                                 '), nl,
+    write('                     `.+ooossyssso+/:-``:y:                                '), nl,
+    write('                 `:oyyso+/:-...--:/oyhhhs/o:                               '), nl,
+    write('              `:syo:.`     .`      ```.-+yhd/.                             '), nl,
+    write('            `+yo-`   `-`   .y  `.  `s    `::oys:`              ``          '), nl,
+    write('           :h+.  `    `s-   -   h.  .  .  y  `-os+.          .ohmo         '), nl,
+    write('          oy. `/++/-   .d`   `  /  .   o  .  :` `:oo:.    `-yho-Ns         '), nl,
+    write('         /h`  /+dm-s    y-   -+    s-  ` `:  :`    `:+o//+ss:` :M.         '), nl,
+    write('         h:   `/oo/.    s`   :-    -     -:           `-/:.    od          '), nl,
+    write('         +o             :                        .`-:/++/+o/.  +m          '), nl,
+    write('          /o-`                             `-`   :y/-`    `/ys-:M.         '), nl,
+    write('           `://-.``        ``      `/ ``.-/+ooo/:+o         `/yhm.         '), nl,
+    write('               `-----...````+:`     h----.`   `--.             .`          '), nl,
+    write('                             :so:--/d`                                     '), nl,
+    write('                               .:///`                                      '), nl, nl.
