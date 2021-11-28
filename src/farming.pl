@@ -132,6 +132,7 @@ harvesting(corn, X, Y)  :-
     write('You gained '), write(N), write(' farming exp!!'), nl,
     updateHarvestQuest,
     updateExpFarming,
+    updateGoldFarmer,
     retractall(planted(corn, RemainingTime, X, Y)), !.
 
 harvesting(corn, X, Y) :-
@@ -156,6 +157,7 @@ harvesting(tomato, X, Y) :-
     write('You gained '), write(N), write(' farming exp!!'), nl,
     updateHarvestQuest,
     updateExpFarming,
+    updateGoldFarmer,
     retractall(planted(tomato, RemainingTime, X, Y)).
 
 harvesting(tomato, X, Y) :-
@@ -180,6 +182,7 @@ harvesting(carrot, X, Y)  :-
     write('You gained '), write(N), write(' farming exp!!'), nl,
     updateHarvestQuest,
     updateExpFarming,
+    updateGoldFarmer,
     retractall(planted(carrot, RemainingTime, X, Y)).
 
 harvesting(carrot, X, Y) :-
@@ -204,6 +207,7 @@ harvesting(potato, X, Y)  :-
     write('You gained '), write(N), write(' farming exp!!'), nl,
     updateHarvestQuest,
     updateExpFarming,
+    updateGoldFarmer,
     retractall(planted(potato, RemainingTime, X, Y)).
 
 harvesting(potato, X, Y) :-
@@ -277,6 +281,17 @@ updateExpFarmingReward :-
     N1 is N + 10,
     retractall(expFarmingReward(_)),
     assertz(expFarmingReward(N1)).
+
+/* Jika spesialisasi farmer, maka akan mendapatkan tambahan gold sebanyak 20 saat panen */
+updateGoldFarmer :-
+    player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, GoldPlayer),
+    Job == farmer,
+    GoldPlayer1 is GoldPlayer + 20,
+    retract(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, GoldPlayer)),
+    assertz(player(Job, Level, LevelFarming, ExpFarming, LevelFishing, ExpFishing, LevelRanching, ExpRanching, ExpPlayer, GoldPlayer1)),
+    write('Congrats! You got 20 golds as bonus...'), nl.
+
+updateGoldFarmer.    
 
 /* Jika berganti hari, sisa waktu panen tanaman akan berkurang */
 updatePlantedItems :-
