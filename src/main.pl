@@ -88,3 +88,29 @@ start:-
     (N =:= 2) -> assert_run(farmer) ;
     (N =:= 3) -> assert_run(rancher) ;
     write('Wrong choice!')), !.
+
+quit:-
+    running(_),
+    retractall(running(_)),
+    retractall(initialized(_)),
+    retractall(player(_, _, _, _, _, _, _, _, _, _)),
+    retractall(playerPosition(_, _)),
+    retractall(day(_)),
+    retractall(move(_)),
+    retractall(maxExp(_)),
+    retractall(teleChance(_)),
+    retractall(expFarmingReward(_)),
+    retractall(planted(_, _, _, _)),
+    retractall(inventory(_, _)),
+    retractall(countFish(_)),
+    retractall(maxCountFish(_)),
+    retractall(expFishingReward(_)),
+    retractall(listDiary(_)),
+    retractall(diggedTile(_, _)),
+    retractall(equipments(_, _, _, _, _, _)),
+    retractall(currentQuest(_, _, _)),
+    retractall(historyQuest(_, _, _)),
+    retractall(nQuest(_)),
+    retractall(expReward(_)),
+    retractall(goldReward(_)),
+    write('Thank you!!!').

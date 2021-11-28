@@ -17,14 +17,25 @@ handleMove:-
     retract(move(_)), asserta(move(NextMove)), !.
 
 dayUpdateNotes:-
-    player(_, Level, _, _, _, _, _, _, Exp, Gold),
     day(D),
+    (
+        D > 365 -> fail;
+        write('')
+    ),
+    player(_, Level, _, _, _, _, _, _, Exp, Gold),
     write('Day '), write(D), write('!!!'), nl,
     write('Level : '), write(Level), nl,
     write('Exp   : '), write(Exp), nl,
     write('The current total gold collected is '), write(Gold), nl,
     RemainingTime is 365 - D,
-    write('You still have '), write(RemainingTime) , write(' day to pay off your debt, if you can\'t... well'), nl.
+    (
+        RemainingTime > 0 -> write('You still have '), write(RemainingTime) , write(' day to pay off your debt, if you can\'t... well'), nl, !;
+        write('This is your last chance, do your best'), nl
+    ).
+
+dayUpdateNotes:-
+    write('You have worked hard, but in the end result is all that matters. May God bless you in the future with kind people!\n'),
+    quit.
 
 placeInteract:-
     playerPosition(X, Y),
@@ -55,6 +66,7 @@ w:-
     YNew is Y - 1,
     retract(playerPosition(X, Y)),
     asserta(playerPosition(X, YNew)),
+    writeMap(0, 0), nl,
     write('You move north.'), nl,
     handleMove,
     placeInteract, !.
@@ -73,6 +85,7 @@ s:-
     YNew is Y + 1,
     retract(playerPosition(X, Y)),
     asserta(playerPosition(X, YNew)),
+    writeMap(0, 0), nl,
     write('You move down.'), nl,
     handleMove,
     placeInteract, !.
@@ -91,6 +104,7 @@ a:-
     XNew is X - 1,
     retract(playerPosition(X, Y)),
     asserta(playerPosition(XNew, Y)),
+    writeMap(0, 0), nl,
     write('You move west.'), nl, 
     handleMove,
     placeInteract,!.
@@ -109,6 +123,7 @@ d:-
     XNew is X + 1,
     retract(playerPosition(X, Y)),
     asserta(playerPosition(XNew, Y)),
+    writeMap(0, 0), nl,
     write('You move east.'), nl, 
     handleMove,
     placeInteract, !.

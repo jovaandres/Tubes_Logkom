@@ -115,6 +115,7 @@ sold(Selling) :-
 			Earn is (Price * Tmb) + Gold,
 			retract(player(_,_,_,_,_,_,_,_,_,Gold)),
 			assertz(player(A,B,C,D,E,F,G,H,I,Earn)),
+			checkGoal,
 			retractall(inventory([Selling,Kuantity,_,_],_)),
 			assertz(inventory([Selling,Hasil,0,Price],sell)),
 			format("Now you have ~w Golds (before ~w)!\nItem ~w is now ~w", [Earn,Gold,Selling,Hasil]);

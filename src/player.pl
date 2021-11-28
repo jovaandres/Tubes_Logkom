@@ -32,3 +32,9 @@ status:-
     write('Exp ranching     : '), write(Exp_Ranching), nl,
     write('Exp              : '), write(Exp), nl,
     write('Gold             : '), write(Gold), nl.
+
+checkGoal:-
+    player(_, _, _, _, _, _, _, _, _, Gold),
+    goal(G),
+    Gold >= G,
+    write('Congratulations! You have finally collected 20000 golds!'), !.
