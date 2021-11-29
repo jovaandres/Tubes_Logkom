@@ -35,7 +35,10 @@ dayUpdateNotes:-
 
 dayUpdateNotes:-
     gameover,
-    write('You have worked hard, but in the end result is all that matters. May God bless you in the future with kind people!\n'),
+    player(_, _, _, _, _, _, _, _, _, Gold),
+    write('Time has run out, you can only collect '), write(Gold), write(' gold, game over.\n'),
+    write('You have worked hard, but in the end result is all that matters.\n'),
+    write('May God bless you in the future with kind people!\n'),
     quit.
 
 placeInteract:-
