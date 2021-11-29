@@ -47,6 +47,8 @@ checkGoal:-
         finishgame, quit
     ).
 
+checkGoal.
+
 finishgame:-
     nl,
     write('`````````````````````.::+ooysooshhyddddddddddddddddmddddddhyyyyss+/-.```              ``````` ``````'), nl,
