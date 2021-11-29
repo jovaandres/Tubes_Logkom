@@ -175,7 +175,6 @@ quit:-
     retractall(expFishingReward(_)),
     retractall(listDiary(_)),
     retractall(diggedTile(_, _)),
-    retractall(equipments(_, _, _, _, _, _)),
     retractall(currentQuest(_, _, _)),
     retractall(historyQuest(_, _, _)),
     retractall(nQuest(_)),
