@@ -1,5 +1,5 @@
 # Tugas Besar IF2121 Computaional Logic
-## Farm Fimulation Role-Playing Game
+## Farm Simulation Role-Playing Game
 Kelompok 08 - K2
 
 | NIM       | Nama                     |

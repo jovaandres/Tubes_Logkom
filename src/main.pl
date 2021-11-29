@@ -131,6 +131,7 @@ assert_run(Job):-
     initRanch,
     initInventory,
     initPlayer(Job),
+    initDiary,
     initQuest.
 
 % Mulai game

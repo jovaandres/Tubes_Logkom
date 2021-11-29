@@ -1,6 +1,7 @@
 :- dynamic(listDiary/1).
 
-listDiary([]).
+initDiary:-
+    asserta(listDiary([])).
 
 /***************************** SLEEPING *****************************/
 
